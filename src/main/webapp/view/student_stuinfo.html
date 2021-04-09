@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>学生信息显示</title>
+    <link rel="stylesheet" href="../static/layui/css/layui.css">
+    <script src="../static/js/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../static/js/jquery.cookie.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../static/layui/layui.js"></script>
+    <script src="../static/js/studentconfig.js" type="text/javascript"
+            charset="utf-8"></script>
+
+
+</head>
+<body>
+<form class="layui-form"  action=""  lay-filter="form1">
+    <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素  form1进行下方ajax中的取值判断-->
+    <!-- 第一个信息将sid进行影藏 -->
+    <input type="text" name="sid" hidden="hidden" />
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-block">
+            <input type="text" name="stuName" lay-verify="stuName" class="layui-input" disabled="" title="不允许修改">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">登录账号</label>
+        <div class="layui-input-block">
+            <input type="text" name="stuNum" id="stuNum" class="layui-input" disabled="" title="不允许修改">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">登录密码</label>
+        <div class="layui-input-block">
+            <input type="password" name="stuPwd" class="layui-input" lay-verify="stuPwd" placeholder="不修改则不填">
+        </div>
+    </div>
+<!--    可以改，需要在controller中进行查找并且保持原样-->
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">生日</label>
+        <div class="layui-input-block">
+<!--            <input type="text" name="stuBirth"  id="stuBirth" class="layui-input" lay-verify="stuBirth" placeholder="按照格式yyyy-MM-dd">-->
+            <input type="text" name="stuBirth" id="stuBirth" autocomplete="off" class="layui-input" placeholder="yyyy-MM-dd">
+        </div>
+    </div>
+<!--    可以使用layui自带的时间表格，省时间，暂时不增加，后续可以考虑进行修改-->
+
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">电话</label>
+        <div class="layui-input-block">
+            <input type="text" name="stuTelephone" class="layui-input" lay-verify="stuTelephone" >
+        </div>
+    </div>
+
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">是否医保</label>
+        <div class="layui-input-block">
+            <input type="text" name="stuInsure" class="layui-input" lay-verify="stuInsure" disabled="" title="不允许修改">
+        </div>
+    </div>
+<!--    学生自主查询中不允许修改，管理员可以进行管理-->
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">性别</label>
+        <div class="layui-input-block">
+            <input type="radio" name="stuSex" value="男" title="男">
+            <input type="radio" name="stuSex" value="女" title="女" >
+            <!-- value传出的数值 -->
+        </div>
+    </div>
+
+
+<!--    <div class="layui-form-item">-->
+<!--        <label class="layui-form-label">选择框</label>-->
+<!--        <div class="layui-input-block">-->
+<!--            <select name="city" lay-verify="required">-->
+<!--                <option value=""></option>-->
+<!--                <option value="0">北京</option>-->
+<!--                <option value="1">上海</option>-->
+<!--                <option value="2">广州</option>-->
+<!--                <option value="3">深圳</option>-->
+<!--                <option value="4">杭州</option>-->
+<!--            </select>-->
+<!--        </div>-->
+<!--    </div>-->
+
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">过敏项</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入过敏选项" class="layui-textarea" name="stuAllergy" lay-verify="stuAllergy"></textarea>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo">提交修改</button>
+            <!--      <button type="reset" class="layui-btn layui-btn-primary">重置</button> -->
+        </div>
+    </div>
+    <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
+</form>
+
+<!--<script>-->
+<!--    layui.use('laydate', function(){-->
+<!--        var laydate = layui.laydate;-->
+
+<!--        //执行一个laydate实例-->
+<!--        laydate.render({-->
+<!--            elem: '#stuBirth' //指定元素-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+
+
+
+<script type="text/javascript">
+    layui.use(['element','layer','layedit','laydate','jquery','form','form','upload'], function(){
+        var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+
+        var element = layui.element;
+        var layer = layui.layer;
+        var $ = layui.jquery;
+
+//        var layedit = layui.layedit;
+        var laydate = layui.laydate;
+
+        var upload = layui.upload;
+        var form = layui.form;
+
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#stuBirth' //指定元素
+        });
+        //     .render({
+        //     elem : '#stuBirth'
+        //     ,trigger: 'click' //防止日期组件闪退
+        // });
+
+        //获取从student.html中传入的cookie值，进行后续的ajax中的交互
+        var stuNum = $.cookie("stuNum");
+        $("#stuNum").text(stuNum);
+
+
+        $.ajax({
+            url: '../stuinfo/selectBystuNum?stuNum='+stuNum,
+            method: 'get',
+            success: function(data) {
+                if(data.code==0){
+                    /* 表单赋值 */
+                    form.val('form1',{
+                        sid: data.data.sid,
+                        stuName: data.data.stuName,
+                        stuNum: data.data.stuNum,
+                        stuPwd: data.data.stuPwd,
+                        stuBirth: data.data.stuBirth,
+                        stuTelephone: data.data.stuTelephone,
+                        stuInsure: data.data.stuInsure,
+                        stuSex: data.data.stuSex,
+                        stuAllergy: data.data.stuAllergy
+
+                    });
+                    // $('#hImg').attr('src',data.data.headImg);，图片文件可以存在，后续增加？
+                }else{
+                    layer.alert(data.msg);
+                }
+            },
+            error: function(data){
+                layer.alert(data.msg);
+            }
+        });
+        // laydate.render({
+        //     elem: '#stuBirth' //指定元素
+        // });
+
+
+        form.verify({
+            // adminName: function(value){
+            //     if(value.length<2){return '名字至少两个字';}
+            // },
+            stuPwd: function(value){
+                if(value.length<6){return '密码至少6个字符';}
+            },
+            // age: function(value){
+            //     if(value<26||value>55){return '年龄不符合规定，26-55之间';}
+            // }
+        });
+
+
+        /* 表单提交 */
+        form.on('submit(formDemo)',function(data){
+            $.ajax({
+                url: '../stuinfo/updateStuinfoBystuNum',
+                method: 'post',
+                data: data.field,
+                success: function(data){
+                    if(data.code==0){
+                        layer.msg("修改成功。", {
+                            icon: 6,
+                            time: 1200,
+                            shade: 0.4
+                        }
+                        // , function() {
+                        //     var layerIndex = parent.layer.getFrameIndex(window.name);//获取当前iframe的索引
+                        //     parent.layer.close(layerIndex); //执行当前弹出窗口
+                        //     parent.window.location.href="../view/student.html"; //返回学生当前页面
+                        // }表单提交之后不做页面的跳转，仅仅进行局部的页面更新。
+                        );
+                    }else{
+                        layer.msg("修改失败，请重试");
+                    }
+                },
+                error: function(){
+                    layer.msg("服务器内部错误");
+                }
+            });
+            return false; //去掉该行layer不关闭
+        });
+        //但是，如果你的HTML是动态生成的，自动渲染就会失效
+        //因此你需要在相应的地方，执行下述方法来进行渲染
+        form.render();//更新信息
+    });
+</script>
+
+<!--<script src="../static/layui/lay/modules/laydate.js"></script>-->
+<!--<script>-->
+<!--    //执行一个laydate实例-->
+<!--    laydate.render({-->
+<!--        elem: '#stuBirth' //指定元素-->
+<!--    });-->
+<!--</script>-->
+
+</body>
+
+</html>

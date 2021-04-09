@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.medicalsystem.mapper.LoginIndexMapper">
+    <resultMap type="com.test.medicalsystem.entity.LoginIndex" id="BaseResultMap">
+
+        <id column="userid" jdbcType="CHAR" property="userid" />
+        <result column="userpwd" jdbcType="CHAR" property="userpwd"/>
+        <result column="userno" jdbcType="CHAR" property="userno"/>
+
+    </resultMap>
+
+    <sql id="Base_Column_List">
+	userid,userpwd,userno
+	</sql>
+
+    <select id="selectUserno"  resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"></include>
+        from loginindex
+        where userid = #{userid} and userpwd = #{userpwd} <!--实体类名  -->
+    </select>
+
+
+
+</mapper>
+
+
+

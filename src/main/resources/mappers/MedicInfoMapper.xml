@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.medicalsystem.mapper.MedicInfoMapper">
+    <!--    对药品类在mapper上做myubatis-->
+    <resultMap id="BaseResultMap" type="com.test.medicalsystem.entity.MedicInfo">
+        <!--        实体类  column=“数据库中的属性名”  类型 property=“entity中定义”-->
+        <id column="mid" jdbcType="INTEGER" property="mid"/>
+        <result column="med_name" jdbcType="VARCHAR" property="medName"/>
+        <result column="in_price" jdbcType="DOUBLE" property="inPrice"/>
+        <result column="out_price" jdbcType="DOUBLE" property="outPrice"/>
+        <result column="publish_date" jdbcType="DATE" property="publishDate"/>
+        <result column="med_num" jdbcType="INTEGER" property="medNum"/>
+        <result column="med_function" jdbcType="VARCHAR" property="medFunction"/>
+        <result column="quality_time" jdbcType="VARCHAR" property="qualityTime"/>
+        <result column="type_id" jdbcType="INTEGER" property="typeId"/>
+        <result column="img_name" jdbcType="VARCHAR" property="imgName"/>
+    </resultMap>
+    <!--搜索列-->
+    <sql id="Base_Column_List">
+        mid,med_name,in_price,out_price,publish_date,med_num,med_function,quality_time,type_id,img_name
+    </sql>
+    <!--搜索函数   搜索类型  -->
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from medic_info
+        where mid = #{mid,jdbcType=INTEGER}
+    </select>
+    <!--    搜索主键   没有问题-->
+    <select id="selectByQueryCondition"
+            parameterType="com.test.medicalsystem.request.MedicQuery"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from medic_info
+        where type_id =0
+        <include refid="queryCondition"/>
+        order by mid
+        limit #{page},#{limit}
+    </select>
+    <sql id="queryCondition">
+        <if test="medName!=null and medName !=''">
+            and med_name like
+            concat(concat('%',#{medName}),'%')
+        </if>
+        <if test="publishDate1 != null and publishDate2 != null">
+            and publish_date between #{publishDate1,jdbcType=DATE} and
+            #{publishDate2,jdbcType=DATE}
+        </if>
+    </sql>
+    <!--    搜索  数目  没有问题-->
+    <select id="selectTotalCount"
+            parameterType="com.test.medicalsystem.request.MedicQuery"
+            resultType="java.lang.Integer">
+        select
+        count(1)
+        from medic_info
+        where type_id =0
+        <include refid="queryCondition"/>
+    </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--下架药物 没有问题 -->
+    <update id="downMedic" parameterType="java.lang.Integer">
+        update medic_info
+        set type_id =1
+        where mid = #{mid,jdbcType=INTEGER}
+    </update>
+    <update id="upAgainMedic" parameterType="java.lang.Integer">
+        update medic_info
+        set type_id =0
+        where mid = #{mid,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectDownMedic">
+        select
+        <include refid="Base_Column_List"/>
+        from medic_info
+        where type_id = 1;
+    </select>
+
+    <!--    删除-->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from medic_info
+    where mid = #{mid,jdbcType=INTEGER}
+</delete>
+
+    <!--    增加-->
+    <insert id="insert" parameterType="com.test.medicalsystem.entity.MedicInfo">
+        insert into medic_info(mid,
+        med_name,in_price,out_price
+        ,publish_date,med_num
+        ,med_function,quality_time,type_id,img_name)
+        values (#{mid,jdbcType=INTEGER},#{med_name,jdbcType=VARCHAR},#{in_price,jdbcType=DOUBLE}
+        ,#{out_price,jdbcType=DOUBLE},#{publish_date,jdbcType=DATE},#{med_num,jdbcType=INTEGER}
+        ,#{med_function,jdbcType=VARCHAR},#{quality_time,jdbcType=VARCHAR},#{type_id,jdbcType=INTEGER}
+        ,#{img_name,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.test.medicalsystem.entity.MedicInfo">
+        insert into medic_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="mid != null">
+                mid,
+            </if>
+            <if test="medName != null">
+                medName,
+            </if>
+            <if test="inPrice != null">
+                inPrice,
+            </if>
+            <if test="outPrice != null">
+                outPrice,
+            </if>
+            <if test="publishDate != null">
+                publishDate,
+            </if>
+            <if test="medNum != null">
+                medNum,
+            </if>
+            <if test="medFunction != null">
+                medFunction,
+            </if>
+            <if test="qualityTime != null">
+                qualityTime,
+            </if>
+            <if test="typeId != null">
+                typeId,
+            </if>
+            <if test="imgName != null">
+                imgName,
+            </if>
+        </trim>
+        <trim prefix="value (" suffix=")" suffixOverrides=",">
+            <if test="mid != null">
+                #{mid,jdbcType=INTEGER},
+            </if>
+            <if test="medName != null">
+                #{med_name,jdbcType=VARCHAR},
+            </if>
+            <if test="inPrice != null">
+                #{in_price,jdbcType=DOUBLE},
+            </if>
+            <if test="outPrice != null">
+                #{out_price,jdbcType=DOUBLE},
+            </if>
+            <if test="publishDate != null">
+                #{publish_date,jdbcType=DATE},
+            </if>
+            <if test="medNum != null">
+                #{med_num,jdbcType=INTEGER},
+            </if>
+            <if test="medFunction != null">
+                #{med_function,jdbcType=VARCHAR},
+            </if>
+            <if test="qualityTime != null">
+                #{quality_time,jdbcType=VARCHAR},
+            </if>
+            <if test="typeId != null">
+                #{type_id,jdbcType=INTEGER},
+            </if>
+            <if test="imgName != null">
+                #{img_name,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <!--    更新-->
+    <update id="updateByPrimarySelective" parameterType="com.test.medicalsystem.entity.MedicInfo">
+        update medic_info
+        <set>
+            <if test="medName != null">
+                med_name = #{med_name,jdbcType=VARCHAR},
+            </if>
+            <if test="inPrice != null">
+                in_price = #{in_price,jdbcType=DOUBLE},
+            </if>
+            <if test="outPrice != null">
+                out_price = #{out_price,jdbcType=DOUBLE},
+            </if>
+            <if test="publishDate != null">
+                publish_date = #{publish_date,jdbcType=DATE},
+            </if>
+            <if test="medNum != null">
+                med_num = #{med_num,jdbcType=INTEGER},
+            </if>
+            <if test="medFunction != null">
+                med_function = #{med_function,jdbcType=VARCHAR},
+            </if>
+            <if test="qualityTime != null">
+                quality_time = #{quality_time,jdbcType=VARCHAR},
+            </if>
+            <if test="typeId != null">
+                type_id = #{type_id,jdbcType=INTEGER},
+            </if>
+            <if test="imgName != null">
+                img_name = #{img_name,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where mid = #{mid,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.test.medicalsystem.entity.MedicInfo">
+        update medic_infor
+        set med_name = #{med_name,jdbcType=VARCHAR},
+            in_price = #{in_price,jdbcType=DOUBLE},
+            out_price = #{out_price,jdbcType=DOUBLE},
+            publish_date = #{publish_date,jdbcType=DATE},
+            med_num = #{med_num,jdbcType=INTEGER},
+            med_function = #{med_function,jdbcType=VARCHAR},
+            quality_time = #{quality_time,jdbcType=VARCHAR},
+            type_id = #{type_id,jdbcType=INTEGER},
+            img_name = #{img_name,jdbcType=VARCHAR}
+        where mid = #{mid,jdbcType=INTEGER}
+    </update>
+
+
+</mapper>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.medicalsystem.mapper.StuInfoMapper">
+    <resultMap id="BaseResultMap" type="com.test.medicalsystem.entity.StuInfo">
+        <id column="sid" jdbcType="INTEGER" property="sid"/>
+        <result column="stu_num" jdbcType="VARCHAR" property="stuNum"/>
+        <result column="stu_name" jdbcType="VARCHAR" property="stuName"/>
+        <result column="stu_pwd" jdbcType="VARCHAR" property="stuPwd"/>
+        <result column="stu_type" jdbcType="VARCHAR" property="stuType"/>
+        <result column="stu_sex" jdbcType="VARCHAR" property="stuSex"/>
+        <result column="stu_birth" jdbcType="VARCHAR" property="stuBirth"/>
+        <result column="stu_telephone" jdbcType="VARCHAR" property="stuTelephone"/>
+        <result column="stu_allergy" jdbcType="VARCHAR" property="stuAllergy"/>
+        <result column="stu_insure" jdbcType="VARCHAR" property="stuInsure"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        sid,stu_num,stu_name,stu_pwd,stu_type,stu_sex,stu_birth,stu_telephone,stu_allergy,stu_insure
+    </sql>
+
+    <!--    基础登录时候查找用户所用到的根据账户用户名和密码进行查找，返回时，对返回密码进行处理-->
+    <select id="selectUser" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"></include>
+        from stu_info
+        where stu_num = #{stuNum} and stu_pwd = #{stuPwd}
+    </select>
+
+
+    <!--    通过对用户的用户名进行全局的查找信息，返回查找信息结果-->
+    <select id="selectBystuNum" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"></include>
+        from stu_info
+        where stu_num = #{stuNum,jdbcType=VARCHAR}
+    </select>
+    <!--    不能存在“”在jdbcType中间-->
+
+    <select id="selectPwdByNum" parameterType="java.lang.String" resultType="java.lang.String">
+        select
+            stu_pwd
+        from stu_info
+        where stu_num = #{stuNum,jdbcType=VARCHAR}
+    </select>
+
+
+    <!--    进行增加操作-->
+    <insert id="insertStuInfo" parameterType="com.test.medicalsystem.entity.StuInfo">
+        insert into stu_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sid !=null">
+                sid,
+            </if>
+            <if test="stuNum !=null">
+                stu_num,
+            </if>
+            <if test="stuName !=null">
+                stu_name,
+            </if>
+            <if test="stuPwd !=null">
+                stu_pwd,
+            </if>
+            <if test="stuType !=null">
+                stu_type,
+            </if>
+            <if test="stuSex !=null">
+                stu_sex,
+            </if>
+            <if test="stuBirth !=null">
+                stu_birth,
+            </if>
+            <if test="stuTelephone !=null">
+                stu_telephone,
+            </if>
+            <if test="stuAllergy !=null">
+                stu_allergy,
+            </if>
+            <if test="stuInsure	!=null">
+                stu_insure,
+            </if>
+        </trim>
+
+
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sid !=null">
+                #{sid,jdbcType=INTEGER},
+            </if>
+            <if test="stuNum !=null">
+                #{stuNum,jdbcType=VARCHAR},
+            </if>
+            <if test="stuName !=null">
+                #{stuName,jdbcType=VARCHAR},
+            </if>
+            <if test="stuPwd !=null">
+                #{stuPwd,jdbcType=VARCHAR},
+            </if>
+            <if test="stuType !=null">
+                #{stuType,jdbcType=VARCHAR},
+            </if>
+            <if test="stuSex !=null">
+                #{stuSex,jdbcType=VARCHAR},
+            </if>
+            <if test="stuBirth !=null">
+                #{stuBirth,jdbcType=VARCHAR},
+            </if>
+            <if test="stuTelephone !=null">
+                #{stuTelephone,jdbcType=VARCHAR},
+            </if>
+            <if test="stuAllergy !=null">
+                #{stuAllergy,jdbcType=VARCHAR},
+            </if>
+            <if test="stuInsure	!=null">
+                #{stuInsure,jdbcType=VARCHAR},
+            </if>
+        </trim>
+
+    </insert>
+
+    <!--    更新学生信息-->
+    <update id="updateStuinfoBystuNum" parameterType="com.test.medicalsystem.entity.StuInfo">
+        update stu_info
+        <set>
+            <!--            <if test="stuNum !=null">-->
+            <!--                stu_num = #{stuNum,jdbcType=VARCHAR},-->
+            <!--            </if>-->
+            <if test="stuName !=null">
+                stu_name = #{stuName,jdbcType=VARCHAR},
+            </if>
+            <if test="stuPwd !=null">
+                stu_pwd = #{stuPwd,jdbcType=VARCHAR},
+            </if>
+            <if test="stuType !=null">
+                stu_type = #{stuType,jdbcType=VARCHAR},
+            </if>
+            <if test="stuSex !=null">
+                stu_sex = #{stuSex,jdbcType=VARCHAR},
+            </if>
+            <if test="stuBirth !=null">
+                stu_birth = #{stuBirth,jdbcType=VARCHAR},
+            </if>
+            <if test="stuTelephone !=null">
+                stu_telephone = #{stuTelephone,jdbcType=VARCHAR},
+            </if>
+            <if test="stuAllergy !=null">
+                stu_allergy = #{stuAllergy,jdbcType=VARCHAR},
+            </if>
+            <if test="stuInsure	!=null">
+                stu_insure = #{stuInsure,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where
+        stu_num = #{stuNum,jdbcType=VARCHAR}
+    </update>
+
+    <!--    通过stuNum进行删除，功能不存在问题，可以执行-->
+    <delete id="deleteBystuNum" parameterType="java.lang.String">
+        delete from stu_info
+        where stu_num = #{stuNum,jdbcType=VARCHAR}
+    </delete>
+
+</mapper>
+    

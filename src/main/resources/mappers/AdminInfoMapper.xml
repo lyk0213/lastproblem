@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.medicalsystem.mapper.AdminInfoMapper">
+    <resultMap id="BaseResultMap" type="com.test.medicalsystem.entity.AdminInfo">
+        <id column="aid" jdbcType="INTEGER" property="aid"/>
+        <result column="admin_num" jdbcType="VARCHAR" property="adminNum"/>
+        <result column="admin_name" jdbcType="VARCHAR" property="adminName"/>
+        <result column="admin_pwd" jdbcType="VARCHAR" property="adminPwd"/>
+        <result column="admin_type" jdbcType="VARCHAR" property="adminType"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        aid,admin_num,admin_name,admin_pwd,admin_type
+    </sql>
+
+    <select id="selectUser" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"></include>
+        from admin_info
+        where admin_num = #{adminNum} and admin_pwd = #{adminPwd}
+    </select>
+
+
+</mapper>
+    

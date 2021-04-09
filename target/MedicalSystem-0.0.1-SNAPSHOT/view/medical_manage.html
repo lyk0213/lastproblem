@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>界面</title>
+    <link href="../static/layui/css/layui.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="../static/layui/layui.js"></script>
+    <script type="text/javascript" src="../static/js/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript" src="../static/js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../static/js/studentconfig.js"></script>
+    <!--    <script src="static/layui/layui.js"></script>影响了时间组件的生成-->
+    <!--    cookie做对信息的传入， studentconfig是对个人控制界面的转发控制-->
+</head>
+<body>
+<div>
+    <div class="demoTable">
+<!--       做模糊查找-->
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <input class="layui-input" name="medName" id="qmedName" autocomplete="off" placeholder="药名">
+                </div>
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">生产时间</label>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="text" name="date1" id="date1" autocomplete="off" class="layui-input" placeholder="yyyy-MM-dd">
+                    </div>
+                    <div class="layui-form-mid">-</div>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="text" name="date2" id="date2" autocomplete="off" class="layui-input" placeholder="yyyy-MM-dd">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn" type="button" id="searchBtn">查询</button>
+                    <button class="layui-btn layui-btn-normal" type="reset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <table id="medicinfo" lay-filter="medicinfo"></table>
+<!--    设立药物表格-->
+
+    <script type="text/html" id="toolBar">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="addNewMedic">添加新药</button>
+            <button class="layui-btn layui-btn-sm" style="background-color:#5FB878" lay-event="showDownMedic">查看已下架药品</button>
+            <button class="layui-btn layui-btn-sm" lay-event="reloadTable" style="background-color:#FF5722;color:black;">刷新表格</button>
+<!-- lay-event  ：：：：addNewMedic    showDownMedic 两个按钮作为触发控件     -->
+        </div>
+    </script>
+
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="down">下架</a>
+<!-- barDemo    编辑，下架  edit  down-->
+    </script>
+    <script type="text/html" id="upBtn">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="upAgain">重新上架</a>
+<!-- upBtn     edit   upAgain-->
+    </script>
+
+</div>
+<script type="text/html" id="imgtmp">
+    <img class="medicImg" src="{{d.imgName}}">
+<!--    图片操作-->
+</script>
+<style type="text/css">
+    .medicImg{
+        width: 140px;
+        height: 180px;
+    }
+    .layui-table-tips-main {
+        margin: 0;
+        /* max-height: 150px; */
+        padding: 0;
+        overflow: visible;
+        background-color: #fff;
+        color: #666;
+    }
+
+    tr {
+        height: 50px;
+    }
+</style>
+<script type="text/javascript">
+    layui.use([ 'table','element','layedit', 'laydate','form'],function() {
+        var table = layui.table;
+        var layer = layui.layer;
+        var layedit = layui.layedit;
+        var laydate = layui.laydate;
+        var form = layui.form;
+        var element = layui.element;
+        //日期
+        laydate.render({
+            elem : '#date1'
+        });
+        laydate.render({
+            elem : '#date2'
+        });
+
+
+        //数据表格数据渲染
+        var tableIns = table.render({
+            elem : '#medicinfo',
+            toolbar : '#toolBar',
+            height : 680,
+            url : '../medic/query', //数据接口-----------------------------------------------
+            page : true, //开启分页
+            cols : [ [ //表头
+                {field : 'mid',title : '药品ID',width : 90,sort : true},
+                {field : 'medName',title : '药名',width : 140},
+                {field : 'inPrice',title : '收入价格',width : 100},
+                {field : 'outPrice',title : '售出价格',width : 60},
+                {field : 'publishDate',title : '生产日期',width : 130},
+                {field : 'medNum',title : '药品剩余',width : 110},
+                {field : 'medFunction',title : '药品功能',width : 140},
+                {field : 'qualityTime',title : '有效期限',width : 90},
+                {field : 'typeId',title : '药品状态'},
+                {field : 'imgName',title : '图片',templet: '#imgtmp',width : 110},
+                {fixed : 'right',width : 138,align : 'center',toolbar : '#barDemo'}
+            ] ]
+        });
+
+        /* 查询按钮 成功*/
+        $('#searchBtn').click(function(){
+            layer.msg('请稍后...',{
+                icon:16,
+                time:800,
+                shade:0,
+            },function(){
+                tableIns.reload({
+                    where:{
+                        medName: $('#qmedName').val(),
+                        date1: $('#date1').val(),
+                        date2: $('#date2').val(),
+                    },page:{
+                        page: 1
+                    }
+                })
+            })
+        });
+
+
+        //监听表格工具头
+        table.on('toolbar(medicinfo)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                //增加，展示的显示
+                case 'addNewMedic': addMedic(); break;
+                case 'showDownMedic': showDownMedic();break;
+                case 'reloadTable': tableIns.reload();break;
+            };
+        });
+        //暂时无法添加药物
+        function addMedic(){
+            layer.open({
+                title: '增加新药品',
+                type: 2,
+                area: ['700px', '550px'],
+                fixed: false, //不固定
+                maxmin: true,
+                content: 'medical_add.html'//添加新药已经做完，现在时间的date类型存在问题
+            });
+        };
+
+
+//无法查看到相应的下架药物列表
+        function showDownMedic(){
+            layer.open({
+                type: 1,
+                title: '下架药品列表',
+                area: ['830px', '360px'],
+                closeBtn: 0,
+                shadeClose: true,
+                skin: 'yourclass',
+                content: '<table id="downMedicList" lay-filter="downMedicList"></table>' //********************************
+            }),
+                table.render({
+                    elem : '#downMedicList',
+                    url : '../medic/downList', //数据接口//********************************
+                    cols : [ [ //表头
+                        {field : 'mid',title : 'ID',width : 120,sort : true},
+                        {field : 'medicName',title : '药名'},
+                        {fixed : 'right',width : 138,align : 'center',toolbar : '#upBtn'}
+                    ] ]
+                });
+        };
+
+        //监听表格按钮事件
+        table.on('tool(medicinfo)',function(obj){
+            var data = obj.data; //获取表格行数据
+            if(obj.event == 'edit'){
+                editMedic(data);
+            }else if(obj.event == 'down'){
+                obj.del();
+                downMedic(data);
+            }
+        });
+        function editMedic(data){
+            layer.open({
+                type: 2,
+                title: '修改药品信息',
+                area: ['800px','550px'],
+                fixed: false,
+                maxmin: true,
+                content: 'medical_update.html',//********************************
+                success: function(layero,index){
+                    var body = layer.getChildFrame('body',index);
+                    body.find('#mid').val(data.mid);//传递药品id个到子页面
+                }
+            })
+        };
+        function downMedic(data){
+            $.ajax({
+                url: '../medic/down?mid='+data.mid,//已经全部完成
+                success: function(data1) {
+                    if (data1.code == 0) {
+                        layer.msg("药: <b style='color:yellow'>"+data.medName+"</b> 下架完成");
+                    } else {
+                        layer.alert("请求失败，请稍后重试");
+                    }
+                },
+                error: function(data1) {
+                    layer.alert("服务器内部错误");
+                }
+            })
+        }
+
+
+        //监听下架图书表格  按钮事件
+        table.on('tool(downMedicList)',function(obj){
+            var data = obj.data; //获取表格行数据
+            if(obj.event == 'edit'){
+                editMedic(data);
+            }else if(obj.event == 'upAgain'){
+                obj.del();
+                upAgain(data);
+            }
+        });
+        function upAgain(data){
+            $.ajax({
+                url: '../medic/up?mid='+data.mid,//********************************
+                success: function(data1) {
+                    if (data1.code == 0) {
+                        layer.msg("药: <b style='color:yellow'>"+data.medicName+"</b> 重新上架");
+                    } else {
+                        layer.alert("请求失败，请稍后重试");
+                    }
+                },
+                error: function(data1) {
+                    layer.alert("服务器内部错误");
+                }
+            })
+        }
+
+    });
+</script>
+</body>
+</html>
+
