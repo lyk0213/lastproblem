@@ -19,5 +19,7 @@ public interface RegisterInfoMapper {
     //分页查询
     List<RegisterInfo>selectByQueryCondition(RegisterQuery query);
 
+    int deleteBystuRegister(String stuRegister);
+
 
 }

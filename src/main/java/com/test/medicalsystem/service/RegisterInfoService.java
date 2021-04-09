@@ -16,4 +16,8 @@ public interface RegisterInfoService {
 
     //分页查询
     PageResult<List<RegisterInfo>> selectByQueryCondition(RegisterQuery query);
+
+    void deleteBystuRegister(String stuRegister);
+
+
 }

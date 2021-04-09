@@ -49,4 +49,9 @@ public class RegisterInfoServiceImpl implements RegisterInfoService{
         result.setData(RegisterList);
         return result;
     }
+
+    public void deleteBystuRegister(String stuRegister) {
+        registerInfoMapper.deleteBystuRegister(stuRegister);
+
+    }
 }

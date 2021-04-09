@@ -50,9 +50,11 @@
     </script>
 
     <script type="text/html" id="barDemo">
-        <a class="layui-btn                  layui-btn-xs" lay-event="edit">查看</a>
+
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="down">删除</a>
     </script>
+<!--上述表单内操作-->
+<!--    <a class="layui-btn                  layui-btn-xs" lay-event="edit">查看</a>-->
 
 </div>
 
@@ -124,92 +126,36 @@
                 case 'reloadTable': tableIns.reload();break;
             };
         });
-        //
-        // function addBook(){
-        //     layer.open({
-        //         title: '增加新图书',
-        //         type: 2,
-        //         area: ['700px', '550px'],
-        //         fixed: false, //不固定
-        //         maxmin: true,
-        //         content: 'book_add.html'
-        //     });
-        // };
-        //
-        //
-        //
-        //
-        //
-        // //监听表格按钮事件
-        // table.on('tool(registerinfo)',function(obj){
-        //     var data = obj.data; //获取表格行数据
-        //     if(obj.event == 'edit'){
-        //         editBook(data);
-        //     }else if(obj.event == 'down'){
-        //         obj.del();
-        //         downBook(data);
-        //     }
-        // });
-        // function editBook(data){
-        //     layer.open({
-        //         type: 2,
-        //         title: '修改图书信息',
-        //         area: ['800px','550px'],
-        //         fixed: false,
-        //         maxmin: true,
-        //         content: 'book_update.html',
-        //         success: function(layero,index){
-        //             var body = layer.getChildFrame('body',index);
-        //             body.find('#bid').val(data.bid);//传递图书id个到子页面
-        //         }
-        //     })
-        // };
-        // function downBook(data){
-        //     $.ajax({
-        //         url: '../book/down?bid='+data.bid,
-        //         success: function(data1) {
-        //             if (data1.code == 0) {
-        //                 layer.msg("图书: <b style='color:yellow'>"+data.bookName+"</b> 下架完成");
-        //             } else {
-        //                 layer.alert("请求失败，请稍后重试");
-        //             }
-        //         },
-        //         error: function(data1) {
-        //             layer.alert("服务器内部错误");
-        //         }
-        //     })
-        // }
-        //
-        //
-        // //监听下架图书表格  按钮事件
-        // table.on('tool(downBookList)',function(obj){
-        //     var data = obj.data; //获取表格行数据
-        //     if(obj.event == 'edit'){
-        //         editBook(data);
-        //     }else if(obj.event == 'upAgain'){
-        //         obj.del();
-        //         upAgain(data);
-        //     }
-        // });
-        // function upAgain(data){
-        //     $.ajax({
-        //         url: '../book/up?bid='+data.bid,
-        //         success: function(data1) {
-        //             if (data1.code == 0) {
-        //                 layer.msg("图书: <b style='color:yellow'>"+data.bookName+"</b> 重新上架");
-        //             } else {
-        //                 layer.alert("请求失败，请稍后重试");
-        //             }
-        //         },
-        //         error: function(data1) {
-        //             layer.alert("服务器内部错误");
-        //         }
-        //     })
-        // }
 
+
+        //监听表格按钮事件
+        table.on('tool(registerinfo)',function(obj){
+            var data = obj.data; //获取表格行数据
+             if(obj.event == 'down'){
+                obj.del();
+                deleteRegister(data);
+            }
+        });
+
+        function deleteRegister(data){
+            //controller还未进行编写，只是写了前端的页面部分
+            $.ajax({
+                url: '../register/registerdown?stuRegister='+data.stuRegister,
+                success: function(data1) {
+                    if (data1.code == 0) {
+                        layer.msg("挂号单: <b style='color:yellow'>"+data.stuRegister+"</b> 删除完成");
+                    } else {
+                        layer.alert("请求失败，请稍后重试");
+                    }
+                },
+
+                error: function(data1) {
+                    layer.alert("服务器内部错误");
+                }
+            })
+        }
     });
 </script>
-
 
 </body>
 </html>

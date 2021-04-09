@@ -66,8 +66,20 @@ public class RegisterController {
             e.printStackTrace();
         }
         return result;
-
     }
+    @RequestMapping(value = "/registerdown")
+    public Result<String> deleteBystuRegister(String stuRegister) {
+        Result<String> result = new Result<String>();
+        try {
+            registerInfoService.deleteBystuRegister(stuRegister);
+        } catch (Exception e) {
+            result.setCode(ConfigUtil.ERROR_CODE);
+            result.setMsg(ConfigUtil.ERROR_MSG);
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 
 
 }

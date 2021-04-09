@@ -130,6 +130,12 @@
         </set>
     </update>
 
+    <delete id="deleteBystuRegister" parameterType="java.lang.String">
+        delete from register_info
+        where stu_register = #{stuRegister,jdbcType=VARCHAR}
+
+    </delete>
+
 
 
 
