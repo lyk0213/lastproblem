@@ -22,4 +22,10 @@ public interface RegisterInfoMapper {
     int deleteBystuRegister(String stuRegister);
 
 
+    //医生端对于病例的全部遍历搜索
+    Integer selectDocTotal(RegisterQuery query);
+    List<RegisterInfo>selectAllForDoc(RegisterQuery query);
+
+
+
 }

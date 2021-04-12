@@ -34,17 +34,43 @@ public class RegisterInfoServiceImpl implements RegisterInfoService{
     public PageResult<List<RegisterInfo>> selectByQueryCondition(RegisterQuery query) {
         query.setPage((query.getPage() - 1) * query.getLimit());
         List<RegisterInfo> RegisterList=registerInfoMapper.selectByQueryCondition(query);
-//        for (RegisterInfo Register : RegisterList){
-//            if (Register.getStuRegister().length()>= 60){
-//                Register.setStuRegister(Register.getStuRegister().substring(0,60));
-//            }
-//        }
+        for (RegisterInfo Register : RegisterList) {
+            if ("0".equals(Register.getTreatmentType())) {
+                Register.setTreatmentType("未就诊");
+//                System.out.println(Register.getTreatmentType());
+            }else if ("1".equals(Register.getTreatmentType())){
+                Register.setTreatmentType("就诊");
+            }
+        }
         int totalCount=registerInfoMapper.selectTotalCount(query);//查询总数目
         PageResult<List<RegisterInfo>> result = new PageResult<List<RegisterInfo>>();
         result.setLimit(query.getLimit());
         result.setCount(totalCount);
 
         Double pageSize=Math.ceil(((double) totalCount/ query.getLimit()));//总页数
+        result.setPageCount(pageSize.intValue());
+        result.setData(RegisterList);
+        return result;
+    }
+
+    public PageResult<List<RegisterInfo>> selectAllForDoc(RegisterQuery query) {
+        query.setPage((query.getPage()-1) * query.getLimit());
+        //医生查询全部
+        List<RegisterInfo> RegisterList = registerInfoMapper.selectAllForDoc(query);
+
+        for (RegisterInfo Register : RegisterList) {
+            if ("0".equals(Register.getTreatmentType())) {
+                Register.setTreatmentType("未就诊");
+            }else if ("1".equals(Register.getTreatmentType())){
+                Register.setTreatmentType("就诊");
+            }
+        }
+        int toCount1=registerInfoMapper.selectDocTotal(query);
+        PageResult<List<RegisterInfo>> result = new PageResult<List<RegisterInfo>>();
+        result.setLimit(query.getLimit());
+        result.setCount(toCount1);
+
+        Double pageSize=Math.ceil(((double) toCount1/ query.getLimit()));
         result.setPageCount(pageSize.intValue());
         result.setData(RegisterList);
         return result;

@@ -16,10 +16,7 @@
         rid,stu_num,stu_name,stu_register,ill_type,ill_date,treatment_type
     </sql>
 
-<!--    查询病例，返回大量的列-->
-<!--    <select id="select">-->
-<!--        -->
-<!--    </select>-->
+<!--    学生，查询挂号单-->
     <select id="selectByQueryCondition"
             parameterType="com.test.medicalsystem.request.RegisterQuery"
             resultMap="BaseResultMap">
@@ -32,12 +29,6 @@
         limit #{page},#{limit}
     </select>
 
-    <sql id="queryCondition">
-        <if test="illDate!=null and illDate !=''">
-            and ill_date = #{illDate,jdbcType=VARCHAR}
-        </if>
-    </sql>
-
     <select id="selectTotalCount"
             parameterType="com.test.medicalsystem.request.RegisterQuery"
             resultType="java.lang.Integer">
@@ -48,6 +39,42 @@
         <include refid="queryCondition"/>
     </select>
 
+
+    <!--  学生端查看时间条件语句查询-->
+    <sql id="queryCondition">
+        <if test="illDate!=null and illDate !=''">
+            and ill_date = #{illDate,jdbcType=VARCHAR}
+        </if>
+    </sql>
+
+<!--医生 查询所有 的挂号单-->
+    <select id="selectAllForDoc"
+            parameterType="com.test.medicalsystem.request.RegisterQuery"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from register_info
+        <include refid="queryConditionOnlyDate"/>
+        order by rid
+        limit #{page},#{limit}
+    </select>
+
+    <select id="selectDocTotal"
+            parameterType="com.test.medicalsystem.request.RegisterQuery"
+            resultType="java.lang.Integer">
+        select
+        count(1)
+        from register_info
+        <include refid="queryConditionOnlyDate"/>
+    </select>
+
+    <sql id="queryConditionOnlyDate">
+        <if test="illDate!=null and illDate !=''">
+            where ill_date = #{illDate,jdbcType=VARCHAR}
+        </if>
+    </sql>
+
+<!--    上面两个查询均为，状态码为0，判断未确诊时候的统一查询-->
 
 
 
@@ -133,8 +160,9 @@
     <delete id="deleteBystuRegister" parameterType="java.lang.String">
         delete from register_info
         where stu_register = #{stuRegister,jdbcType=VARCHAR}
-
     </delete>
+
+
 
 
 

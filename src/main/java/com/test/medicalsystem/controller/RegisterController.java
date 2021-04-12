@@ -41,25 +41,22 @@ public class RegisterController {
         }
         return result;
     }
-
+/*
+学生查询自己当前的挂号单子
+ */
     @RequestMapping(value = "/query")
     public PageResult<List<RegisterInfo>> selectByQueryCondition(RegisterQuery query){
         int page =query.getPage();
         PageResult<List<RegisterInfo>> result = new PageResult<List<RegisterInfo>>();
         try {
-//            String a=query.getStuNum();
-//            if (a.equals(null)&&"".equals(a)){
-//                result.setCode(ConfigUtil.ERROR_CODE);
-//                result.setMsg("请点击查询做查询操作");
-//            }else{
+
                 System.out.println(query);
                 result =registerInfoService.selectByQueryCondition(query);
                 result.setPage(page);
                 if (result.getData() == null){
                     result.setCode(ConfigUtil.ERROR_CODE);
                     result.setMsg("未找到任何数据");
- //               }
-            }
+                }
         } catch (Exception e) {
             result.setCode(ConfigUtil.ERROR_CODE);
             result.setMsg(ConfigUtil.ERROR_MSG);
@@ -72,6 +69,28 @@ public class RegisterController {
         Result<String> result = new Result<String>();
         try {
             registerInfoService.deleteBystuRegister(stuRegister);
+        } catch (Exception e) {
+            result.setCode(ConfigUtil.ERROR_CODE);
+            result.setMsg(ConfigUtil.ERROR_MSG);
+            e.printStackTrace();
+        }
+        return result;
+    }
+/*
+医生查询全部挂号的语句
+ */
+    @RequestMapping(value = "/docquery")
+    public PageResult<List<RegisterInfo>> docselectAll(RegisterQuery query){
+        int page =query.getPage();
+        PageResult<List<RegisterInfo>> result = new PageResult<List<RegisterInfo>>();
+        try {
+            System.out.println(query);
+            result =registerInfoService.selectAllForDoc(query);
+            result.setPage(page);
+            if (result.getData() == null){
+                result.setCode(ConfigUtil.ERROR_CODE);
+                result.setMsg("未找到任何数据");
+            }
         } catch (Exception e) {
             result.setCode(ConfigUtil.ERROR_CODE);
             result.setMsg(ConfigUtil.ERROR_MSG);

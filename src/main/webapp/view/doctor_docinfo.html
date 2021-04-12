@@ -68,8 +68,6 @@
             <button class="layui-btn" lay-submit lay-filter="formDemo">提交修改</button>
         </div>
     </div>
-
-
 </form>
 
 <script type="text/javascript">
@@ -85,7 +83,6 @@
         //获取cookie值，进行后续的ajax中的交互
         var docNum = $.cookie("docNum");
         $("#docNum").text(docNum);
-
 
         $.ajax({
             url: '../docinfo/selectByDocNum?docNum='+docNum,
@@ -104,7 +101,6 @@
                         docWorktime: data.data.docWorktime,
                         docLevel: data.data.docLevel,
                         docPosition: data.data.docPosition
-
                     });
                     // $('#hImg').attr('src',data.data.headImg);，图片文件可以存在，后续增加？
                 }else{
@@ -115,14 +111,11 @@
                 layer.alert(data.msg);
             }
         });
-
-
         form.verify({
             docPwd: function(value){
                 if(value.length<6){return '密码至少6个字符';}
             },
         });
-
         /* 表单提交 */
         form.on('submit(formDemo)',function(data){
             $.ajax({
@@ -136,11 +129,6 @@
                                 time: 1200,
                                 shade: 0.4
                             }
-                            // , function() {
-                            //     var layerIndex = parent.layer.getFrameIndex(window.name);//获取当前iframe的索引
-                            //     parent.layer.close(layerIndex); //执行当前弹出窗口
-                            //     parent.window.location.href="../view/student.html"; //返回学生当前页面
-                            // }表单提交之后不做页面的跳转，仅仅进行局部的页面更新。
                         );
                     }else{
                         layer.msg("修改失败，请重试");
@@ -157,7 +145,5 @@
         form.render();//更新信息
     });
 </script>
-
-
 </body>
 </html>
