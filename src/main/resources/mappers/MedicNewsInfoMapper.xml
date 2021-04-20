@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.medicalsystem.mapper.MedicNewsInfoMapper">
+    <resultMap id="BaseResultMap" type="com.test.medicalsystem.entity.MedicNewsInfo">
+        <id column="mid" jdbcType="INTEGER" property="mid"/>
+        <result column="medic_num" jdbcType="VARCHAR" property="medicNum"/>
+        <result column="medic_name" jdbcType="VARCHAR" property="medicName"/>
+        <result column="medic_amount" jdbcType="INTEGER" property="medicAmount"/>
+        <result column="medic_price" jdbcType="DOUBLE" property="medicPrice"/>
+        <result column="medic_ratio" jdbcType="VARCHAR" property="medicRatio"/>
+        <result column="medic_use" jdbcType="VARCHAR" property="medicUse"/>
+        <result column="medic_ban" jdbcType="VARCHAR" property="medicBan"/>
+        <result column="medic_type" jdbcType="VARCHAR" property="medicType"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        mid,medic_num,medic_name,medic_amount,medic_price,medic_ratio,medic_use,medic_ban,medic_type
+    </sql>
+<!--    管理员对药物进行分页查找-->
+    <select id="selectByQueryCondition"
+            parameterType="com.test.medicalsystem.request.medicNewQuery"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from medic_news_info
+        <include refid="queryCondition"/>
+        order by mid
+        limit #{page},#{limit}
+    </select>
+    <select id="selectTotalCount"
+            parameterType="com.test.medicalsystem.request.medicNewQuery"
+            resultType="java.lang.Integer">
+        select
+        count(1)
+        from medic_news_info
+        <include refid="queryCondition"/>
+    </select>
+    <!--    sql查询语句-->
+    <sql id="queryCondition">
+        <if test="medicName!=null and medicName!=''">
+            where medic_name like
+            concat(concat('%',#{medicName}),'%')
+        </if>
+    </sql>
+
+
+
+
+    <!--    用户名进行查找信息-->
+    <select id="selectBymedicNum" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"></include>
+        from medic_news_info
+        where medic_num = #{medicNum,jdbcType=VARCHAR}
+
+    </select>
+<!--    药品信息表-->
+    <insert id="insertMedicNewsInfo" parameterType="com.test.medicalsystem.entity.MedicNewsInfo">
+        insert into medic_news_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="mid !=null">
+                mid,
+            </if>
+            <if test="medicNum !=null">
+                medic_num,
+            </if>
+            <if test="medicName !=null">
+                medic_name,
+            </if>
+            <if test="medicAmount !=null">
+                medic_amount,
+            </if>
+            <if test="medicPrice !=null">
+                medic_price,
+            </if>
+            <if test="medicRatio !=null">
+                medic_ratio,
+            </if>
+            <if test="medicUse !=null">
+                medic_use,
+            </if>
+            <if test="medicBan !=null">
+                medic_ban,
+            </if>
+            <if test="medicType !=null">
+                medic_type,
+            </if>
+        </trim>
+
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="mid !=null">
+                #{mid,jdbcType=INTEGER},
+            </if>
+            <if test="medicNum !=null">
+                #{medicNum,jdbcType=VARCHAR},
+            </if>
+            <if test="medicName !=null">
+                #{medicName,jdbcType=VARCHAR},
+            </if>
+            <if test="medicAmount !=null">
+                #{medicAmount,jdbcType=INTEGER},
+            </if>
+            <if test="medicPrice !=null">
+                #{medicPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="medicRatio !=null">
+                #{medicRatio,jdbcType=VARCHAR},
+            </if>
+            <if test="medicUse !=null">
+                #{medicUse,jdbcType=VARCHAR},
+            </if>
+            <if test="medicBan !=null">
+                #{medicBan,jdbcType=VARCHAR},
+            </if>
+            <if test="medicType !=null">
+                #{medicType,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+<!--    更新药物信息-->
+    <update id="updateMedicNewsInfoBymedicNum" parameterType="com.test.medicalsystem.entity.MedicNewsInfo">
+        update medic_news_info
+        <set>
+            <if test="medicName !=null">
+                medic_name = #{medicName,jdbcType=VARCHAR},
+            </if>
+            <if test="medicAmount !=null">
+                medic_amount = #{medicAmount,jdbcType=INTEGER},
+            </if>
+            <if test="medicPrice !=null">
+                medic_price = #{medicPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="medicRatio !=null">
+                medic_ratio = #{medicRatio,jdbcType=VARCHAR},
+            </if>
+            <if test="medicUse !=null">
+                medic_use = #{medicUse,jdbcType=VARCHAR},
+            </if>
+            <if test="medicBan !=null">
+                medic_ban = #{medicBan,jdbcType=VARCHAR},
+            </if>
+            <if test="medicType !=null">
+                medic_type = #{medicType,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where
+        medic_num = #{medicNum,jdbcType=VARCHAR}
+    </update>
+
+<!--    删除by编号-->
+    <delete id="deleteBymedicNum" parameterType="java.lang.String">
+        delete from medic_news_info
+        where
+        medic_num = #{medicNum,jdbcType=VARCHAR}
+    </delete>
+
+
+</mapper>
+    

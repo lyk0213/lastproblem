@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员增加药物</title>
+    <link rel="stylesheet" href="../static/layui/css/layui.css">
+    <script src="../static/js/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../static/js/jquery.cookie.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../static/layui/layui.js"></script>
+    <script src="../static/js/adminconfig.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<form class="layui-form" action="" lay-filter="form1">
+    <input type="text" name="mid" hidden="hidden"/>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">药品名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="medicName" lay-verify="medicName" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">药品编号</label>
+        <div class="layui-input-block">
+            <input type="text" name="medicNum" id="medicNum" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">药品数量</label>
+        <div class="layui-input-block">
+            <input type="text" name="medicAmount" lay-verify="medicAmount" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">药品单价</label>
+        <div class="layui-input-block">
+            <input type="text" name="medicPrice" id="medicPrice" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">医保折扣</label>
+        <div class="layui-input-block">
+            <input type="text" name="medicRatio" id="medicRatio" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">治疗症状</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入药品的治疗功能" class="layui-textarea" name="medicUse" lay-verify="medicUse"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">药物禁忌</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入药物适用不适用禁忌" class="layui-textarea" name="medicBan"
+                      lay-verify="medicBan"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="addForm">增加药品信息</button>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    layui.use(['element', 'layer', 'layedit', 'laydate', 'jquery', 'form', 'form', 'upload'], function () {
+        var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+        var element = layui.element;
+        var layer = layui.layer;
+        var $ = layui.jquery;
+//        var layedit = layui.layedit;
+        var laydate = layui.laydate;
+        var upload = layui.upload;
+        var form = layui.form;
+
+        var adminNum = $.cookie("adminNum");
+        $("#adminNum").text(adminNum);
+
+
+        form.verify({
+            medicPrice: function (value,item) {
+                if(/^[1-9]\d*$/.test(value)){
+                    return  '数目必须为正数';
+                }
+            }
+        });
+        //^[1-9]\d*$
+        //不带有小数点
+        //^[+]{0,1}(\d+)$
+        //带小数点
+        form.on('submit(addForm)', function (data) {
+            $.ajax({
+                url: '../admincontroal/insertMedicNewsInfo',
+                method: 'post',
+                data: data.field,
+                success: function (data) {
+                    if (data.code == 0) {
+                        layer.msg("添加成功", {
+                            icon: 6,
+                            time: 1200,
+                            shade: 0.4
+                        });
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                },
+                error: function () {
+                    layer.msg("服务器内部错误");
+                }
+            });
+            return false;
+        });
+        form.render();
+    });
+</script>
+
+
+</body>
+</html>

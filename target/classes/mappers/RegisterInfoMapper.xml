@@ -75,6 +75,13 @@
     </sql>
 
 <!--    上面两个查询均为，状态码为0，判断未确诊时候的统一查询-->
+    
+    <select id="selectBystuRegister" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from register_info
+        where  stu_register = #{stuRegister,jdbcType=VARCHAR}
+    </select>
 
 
 

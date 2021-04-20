@@ -80,4 +80,9 @@ public class RegisterInfoServiceImpl implements RegisterInfoService{
         registerInfoMapper.deleteBystuRegister(stuRegister);
 
     }
+
+    public RegisterInfo selectBystuRegister(String stuRegister) {
+        RegisterInfo registerInfo = registerInfoMapper.selectBystuRegister(stuRegister);
+        return registerInfo;
+    }
 }

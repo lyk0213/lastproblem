@@ -1,4 +1,6 @@
 package com.test.medicalsystem.service.impl;
+import com.test.medicalsystem.request.stuinfoQuery;
+import com.test.medicalsystem.result.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -8,6 +10,8 @@ import com.test.medicalsystem.config.ConfigUtil;
 import com.test.medicalsystem.entity.StuInfo;
 import com.test.medicalsystem.mapper.StuInfoMapper;
 import com.test.medicalsystem.service.StuInfoService;
+
+import java.util.List;
 
 @Service
 public class StuInfoServiceImpl implements StuInfoService{
@@ -48,5 +52,22 @@ public class StuInfoServiceImpl implements StuInfoService{
 
     public void deleteBystuNum(String stuNum) {
         stuInfoMapper.deleteBystuNum(stuNum);
+    }
+
+    public PageResult<List<StuInfo>> selectByQueryCondition(stuinfoQuery query) {
+        query.setPage((query.getPage()-1) *query.getLimit());
+
+        List<StuInfo> StuList = stuInfoMapper.selectByQueryCondition(query);
+        //做条件
+
+        int toCount = stuInfoMapper.selectTotalCount(query);
+        PageResult<List<StuInfo>> result = new PageResult<List<StuInfo>>();
+        result.setLimit(query.getLimit());
+        result.setCount(toCount);
+
+        Double pageSize = Math.ceil(((double) toCount/ query.getLimit()));
+        result.setPageCount(pageSize.intValue());
+        result.setData(StuList);
+        return result;
     }
 }

@@ -19,6 +19,59 @@
         sid,stu_num,stu_name,stu_pwd,stu_type,stu_sex,stu_birth,stu_telephone,stu_allergy,stu_insure
     </sql>
 
+<!--    学生分页查询-->
+    <select id="selectByQueryCondition"
+            parameterType="com.test.medicalsystem.request.stuinfoQuery"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from stu_info
+        where stu_type=2
+        <include refid="queryCondition"/>
+        order by sid
+        limit #{page},#{limit}
+    </select>
+<!--    查询条数-->
+    <select id="selectTotalCount"
+            parameterType="com.test.medicalsystem.request.stuinfoQuery"
+            resultType="java.lang.Integer">
+        select
+        count(1)
+        from stu_info
+        where stu_type=2
+        <include refid="queryCondition"/>
+    </select>
+
+<!--    sql语句做条件查询-->
+    <sql id="queryCondition">
+        <if test="stuNum!=null and stuNum !=''">
+            and stu_num = #{stuNum,jdbcType=VARCHAR}
+        </if>
+        <if test="stuName!=null and stuName !=''">
+            and stu_name like
+            concat(concat('%',#{stuName}),'%')
+        </if>
+
+
+    </sql>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <!--    基础登录时候查找用户所用到的根据账户用户名和密码进行查找，返回时，对返回密码进行处理-->
     <select id="selectUser" resultMap="BaseResultMap">
         select

@@ -41,6 +41,8 @@ public class RegisterController {
         }
         return result;
     }
+    //需要修改当前的学生挂号单子表，并且将其进行修改就诊状态
+
 /*
 学生查询自己当前的挂号单子
  */

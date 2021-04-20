@@ -44,6 +44,10 @@
     <script type="text/html" id="barDemo">
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="doit">进行诊断</a>
     </script>
+
+<!--    <script type="text/html" id="barDemo1">-->
+<!--        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="doit1">开具处方单</a>-->
+<!--    </script>-->
 </div>
 
 
@@ -119,8 +123,30 @@
             if(obj.event == 'doit'){
                 // obj.del();
                 // deleteRegister(data);
+                addMedicRecord(data);
             }
         });
+
+
+        function addMedicRecord(data) {
+            layer.open({
+                type: 2,
+                title: '增加病历单信息',
+                area: ['800px','550px'],
+                fixed: false,
+                maxmin: true,
+                content: 'doctor_addMedicRecord.html',
+                success: function(layero,index){
+                    var body = layer.getChildFrame('body',index);
+                    body.find('#stuRegister').val(data.stuRegister);//传递病历单号到子页面
+                }
+            })
+
+        };
+
+
+
+
 
         // function deleteRegister(data){
         //     //controller还未进行编写，只是写了前端的页面部分
@@ -139,6 +165,8 @@
         //         }
         //     })
         // }
+
+
     });
 </script>
 

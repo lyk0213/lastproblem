@@ -25,4 +25,9 @@ public class AdminInfoServiceImpl implements AdminInfoService{
         }
         return null;
     }
+
+    public AdminInfo selectNews(String adminNum) {
+        AdminInfo adminInfo = adminInfoMapper.selectNews(adminNum);
+        return adminInfo;
+    }
 }

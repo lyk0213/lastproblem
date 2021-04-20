@@ -22,5 +22,14 @@
     </select>
 
 
+
+    <select id="selectNews" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"></include>
+        from admin_info
+        where admin_num = #{adminNum,jdbcType=VARCHAR}
+    </select>
+
+
 </mapper>
     

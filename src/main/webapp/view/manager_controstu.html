@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学生信息管理</title>
+    <link   href="../static/layui/css/layui.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="../static/layui/layui.js"></script>
+    <script type="text/javascript" src="../static/js/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript" src="../static/js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../static/js/adminconfig.js"></script>
+</head>
+<body>
+<div>
+<!--    前置控制进行查询的按钮-->
+    <div class="demoTable">
+        <form class="layui-form"  lay-filter="form1">
+            <div class="layui-form-item">
+                <input type="text" name="adminNum" hidden="hidden" />
+                <div class="layui-inline">
+                    <label class="layui-form-label">账号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="stuNum"  id="stuNum" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">用户姓名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="stuName" id="stuName" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+
+                <div class="layui-inline">
+                    <!--                        <button class="layui-btn" type="button" id="searchBtn">查询</button>-->
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit
+                            lay-filter="LAY-user-front-search" type="button" id="searchBtn">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+
+                <div class="layui-inline">
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+    <table id="stuinfo" lay-filter="stuinfo"></table>
+
+    <script type="text/html" id="toolBar">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="addNewStu">添加学生</button>
+            <button class="layui-btn layui-btn-sm" lay-event="reloadTable">刷新表格</button>
+        </div>
+    </script>
+
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="doit">修改信息</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="down">删除</a>
+    </script>
+
+</div>
+<script type="text/javascript">
+    layui.use([ 'table','element','layedit', 'laydate','form','jquery'],function() {
+        var table = layui.table;
+        var layer = layui.layer;
+        var layedit = layui.layedit;
+        var laydate = layui.laydate;
+        var form = layui.form;
+        var element = layui.element;
+        var $ = layui.jquery;
+
+
+        // laydate.render({
+        //     elem : '#Date1'
+        // });
+
+        var adminNum = $.cookie("adminNum");
+        $("#adminNum").text(adminNum);
+
+        //数据表格数据渲染
+        var tableIns = table.render({
+            elem : '#stuinfo',
+            toolbar : '#toolBar',
+            height : 680,
+            url : '../admincontroal/querystulist?adminNum='+adminNum,
+            page : true, //开启分页
+            cols : [ [ //表头
+                {field : 'stuNum',title : '学生账号',width : 140,sort: true},
+                {field : 'stuName',title : '学生姓名',width : 140},
+                {field : 'stuPwd',title : '学生密码',width : 140},
+                {field : 'stuSex',title : '学生性别',width : 140},
+                {field : 'stuBirth',title : '学生生日',width : 150},
+                {field : 'stuTelephone',title : '学生电话',width : 150},
+                {field : 'stuAllergy',title : '学生过敏状况',width : 100},
+                {field : 'stuInsure',title : '学生医保类型',width : 100},
+                {fixed : 'right',title : '操作功能',width : 138,align : 'center',toolbar : '#barDemo'}
+            ] ]
+        });
+
+        /* 查询按钮 */
+        $('#searchBtn').click(function(){
+            layer.msg('请稍后...',{
+                icon:16,
+                time:800,
+                shade:0,
+            },function(){
+                tableIns.reload({
+                    where:{
+                        // illDate: $('#Date1').val(),
+                        stuNum: $('#stuNum').val(),
+                        stuName: $('#stuName').val(),
+                    },page:{
+                        page: 1
+                    }
+                })
+            })
+        });
+
+
+        //监听表格工具头
+        table.on('toolbar(stuinfo)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'reloadTable': tableIns.reload();break;
+                case 'addNewStu': addNewStu();break;
+            };
+        });
+
+        function addNewStu(){
+            layer.open({
+                title:'新增加学生',
+                type: 2,//增加打开页面
+                area: ['800px','600px'],
+                fixed: false,//不固定
+                maxmin: true,
+                content: 'manager_add_onestu.html'
+            });
+        };
+
+        //监听表格按钮事件
+        table.on('tool(stuinfo)',function(obj){
+            var data = obj.data; //获取表格行数据
+            if(obj.event == 'doit'){
+                editStuNews(data);
+            }else if(obj.event == 'down'){
+                obj.del();
+                downStu(data);
+            }
+        });
+
+        function editStuNews(data){
+            layer.open({
+                type: 2,//增加才可以打开页面,2为打开html链接
+                title: '修改学生信息',
+                area: ['800px','600px'],
+                fixed: false,
+                maxmin: true,
+                content: 'manager_edit_stuinfo.html',
+                success:function (layero,index){
+                    var body =layer.getChildFrame('body',index);
+                    body.find('#stuNum').val(data.stuNum);
+                }
+            });
+        };
+
+        function downStu(data){
+            $.ajax({
+                url: '../admincontroal/deleteBystuNum?stuNum='+data.stuNum,
+                success:function (data1){
+                    if (data1.code ==0){
+                        layer.msg("学生:<b style='color:skyblue'>"+data.stuName+"</b> 被踢出学校");
+                    }else {
+                        layer.alert("请求失败，请稍后重试");
+                    }
+                },
+                error: function (data1){
+                 layer.alert("服务器内部错误");
+                }
+            })
+        }
+    });
+</script>
+</body>
+</html>

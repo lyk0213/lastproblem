@@ -8,4 +8,6 @@ public interface AdminInfoService {
      */
 
     AdminInfo loginAdmin(String num,String pwd);
+
+    AdminInfo selectNews(String adminNum);
 }

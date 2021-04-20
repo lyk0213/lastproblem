@@ -1,6 +1,11 @@
 package com.test.medicalsystem.service;
 
 import com.test.medicalsystem.entity.StuInfo;
+import com.test.medicalsystem.result.PageResult;
+import com.test.medicalsystem.request.stuinfoQuery;
+
+import java.util.List;
+
 public interface StuInfoService {
     /*
     学生登录
@@ -20,6 +25,9 @@ public interface StuInfoService {
     void updateStuinfoBystuNum(StuInfo record);
 
     void deleteBystuNum (String stuNum);
+
+    //分页查询
+    PageResult<List<StuInfo>> selectByQueryCondition(stuinfoQuery query);
 
 
 

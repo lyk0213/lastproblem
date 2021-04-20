@@ -26,6 +26,7 @@ public interface RegisterInfoMapper {
     Integer selectDocTotal(RegisterQuery query);
     List<RegisterInfo>selectAllForDoc(RegisterQuery query);
 
+    RegisterInfo  selectBystuRegister(String stuRegister);
 
 
 }

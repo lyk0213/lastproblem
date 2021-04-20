@@ -1,8 +1,10 @@
 package com.test.medicalsystem.mapper;
 
 import org.apache.ibatis.annotations.Param;
+import java.util.List;
 
 import com.test.medicalsystem.entity.StuInfo;
+import com.test.medicalsystem.request.stuinfoQuery;
 public interface StuInfoMapper {
     /*
     学生登录
@@ -21,6 +23,13 @@ public interface StuInfoMapper {
     int updateStuinfoBystuNum(StuInfo record);
 
     int deleteBystuNum (String stuNum);
+
+    /*
+    分页查找
+     */
+    Integer selectTotalCount(stuinfoQuery query);
+    List<StuInfo>  selectByQueryCondition(stuinfoQuery query);
+
 
 
 

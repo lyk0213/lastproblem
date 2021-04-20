@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员增加医生信息</title>
+    <link rel="stylesheet" href="../static/layui/css/layui.css">
+    <script src="../static/js/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../static/js/jquery.cookie.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../static/layui/layui.js"></script>
+    <script src="../static/js/doctorconfig.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<form class="layui-form"  action=""  lay-filter="form1">
+    <input type="text" name="did" hidden="hidden" />
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-block">
+            <input type="text" name="docName" lay-verify="docName" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">账号</label>
+        <div class="layui-input-block">
+            <input type="text" name="docNum" id="docNum" class="layui-input" >
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">登录密码</label>
+        <div class="layui-input-block">
+            <input type="password" name="docPwd" class="layui-input" lay-verify="docPwd">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">性别</label>
+        <div class="layui-input-block">
+            <input type="radio" name="docSex" value="男" title="男">
+            <input type="radio" name="docSex" value="女" title="女" >
+            <!-- value传出的数值 -->
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">联系电话</label>
+        <div class="layui-input-block">
+            <input type="text" name="docTelephone" class="layui-input" lay-verify="docTelephone" >
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">入职日期</label>
+        <div class="layui-input-block">
+            <input type="text" name="docWorktime" id="docWorktime" autocomplete="off" class="layui-input" placeholder="yyyy-MM-dd">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">医生评级</label>
+        <div class="layui-input-block">
+            <input type="radio" name="docLevel" value="主治医师" title="主治医师">
+            <input type="radio" name="docLevel" value="副主任医师" title="副主任医师" >
+            <input type="radio" name="docLevel" value="主任医师" title="主任医师" >
+            <input type="radio" name="docLevel" value="见习医师" title="见习医师" >
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">医生当前职位</label>
+        <div class="layui-input-block">
+            <input type="radio" name="docPosition" value="医生" title="医生">
+            <input type="radio" name="docPosition" value="挂号员" title="挂号员" >
+            <input type="radio" name="docPosition" value="护理人员" title="护理人员" >
+            <!-- value传出的数值 -->
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="addForm">增加医生</button>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    layui.use(['element','layer','jquery','form','form','upload','laydate'], function(){
+        var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+
+        var element = layui.element;
+        var layer = layui.layer;
+        var $ = layui.jquery;
+        var upload = layui.upload;
+        var form = layui.form;
+        var laydate = layui.laydate;
+
+        var docNum = $.cookie("docNum");
+        $("#docNum").text(docNum);
+
+        laydate.render({
+            elem: '#docWorktime' //指定元素
+            ,trigger: 'click' //防止日期组件闪退
+        });
+        /*添加医生的表单*/
+        form.on('submit(addForm)',function(data){
+            $.ajax({
+                url: '../admincontroal/insertDocInfo',
+                method: 'post',
+                data: data.field,
+                success : function (data) {
+                    if (data.code==0){
+                        layer.msg("添加成功", {
+                            icon: 6,
+                            time: 1200,
+                            shade: 0.4
+                        });
+                    }else{
+                        layer.msg(data.msg);
+                    }
+                },
+                error : function (){
+                    layer.msg("服务器内部错误");
+                }
+            });
+            return false;
+        });
+        form.render();
+    });
+</script>
+</body>
+</html>

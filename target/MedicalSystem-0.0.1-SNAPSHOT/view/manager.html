@@ -80,6 +80,16 @@
                 </li>
 
                 <li class="layui-nav-item">
+                    <a id="addstudent" href="manager_controstu.html">添加学生信息</a>
+                </li>
+                <li class="layui-nav-item">
+                    <a id="adddoctor" href="manager_controdoc.html">添加医生信息</a>
+                </li>
+                <li class="layui-nav-item">
+                    <a id="addmedic" href="manager_contromedic.html">药物信息管理</a>
+                </li>
+
+                <li class="layui-nav-item">
                     <a id="" href="javascript:;">图示化</a>
                 </li>
 
@@ -89,7 +99,7 @@
 
     <div class="layui-body">
         <!-- 内容主体区域 -->
-        <div style="padding: 5px;" id="main_content">内容主体区域</div>
+        <iframe id="iframeMain" src="" style="width: 100%"; height="100%";></iframe>
     </div>
 
     <div class="layui-footer">
@@ -110,7 +120,8 @@
         var adminNum = $.cookie("adminNum");
         $("#adminName").text(adminName);
         //可以存在头像框，这个之后再做
-
+        $.cookie("adminName", adminName);
+        $.cookie("adminNum", adminNum);
 
         // $("#admin-info").click(function(){    基本资料控件
         //     layer.open({
@@ -135,5 +146,36 @@
     });
 
 </script>
+    <script>
+    //JavaScript代码区域
+    layui.use('element', function(){
+        var element = layui.element;
+        var $=layui.jquery;
+        $(document).ready(function(){
+            $("dd>a").click(function(e){
+                e.preventDefault();
+                $("#iframeMain").attr("src",$(this).attr("href"));
+            });
+        });
+
+    });
+</script>
+
+<script>
+    //JavaScript代码区域
+    layui.use('element', function(){
+        var element = layui.element;
+        var $=layui.jquery;
+        $(document).ready(function(){
+            $("li>a").click(function(e){
+                e.preventDefault();
+                $("#iframeMain").attr("src",$(this).attr("href"));
+            });
+        });
+
+    });
+</script>
+
+
 </body>
 </html>

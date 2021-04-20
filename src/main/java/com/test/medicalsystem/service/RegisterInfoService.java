@@ -22,5 +22,7 @@ public interface RegisterInfoService {
 //    List<RegisterInfo>selectAllForDoc(RegisterQuery query);
     void deleteBystuRegister(String stuRegister);
 
+    RegisterInfo  selectBystuRegister(String stuRegister);
+
 
 }

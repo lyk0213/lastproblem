@@ -12,4 +12,7 @@ public interface AdminInfoMapper {
 
     AdminInfo selectUser(@Param("adminNum")String adminNum,@Param("adminPwd")String adminPwd);
 
+
+    AdminInfo selectNews(String adminNum);
+
 }
