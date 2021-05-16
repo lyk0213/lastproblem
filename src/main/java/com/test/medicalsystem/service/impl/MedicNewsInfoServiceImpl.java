@@ -37,6 +37,11 @@ public class MedicNewsInfoServiceImpl implements MedicNewsInfoService{
         return medicNewsInfo;
     }
 
+    public MedicNewsInfo selectBymedicName(String medicName) {
+        MedicNewsInfo medicNewsInfo = medicNewsInfoMapper.selectBymedicName(medicName);
+        return medicNewsInfo;
+    }
+
     public PageResult<List<MedicNewsInfo>> selectByQueryCondition(medicNewQuery query) {
         query.setPage((query.getPage()-1)* query.getLimit());
         List<MedicNewsInfo> MedicList =medicNewsInfoMapper.selectByQueryCondition(query);
@@ -50,5 +55,9 @@ public class MedicNewsInfoServiceImpl implements MedicNewsInfoService{
         result.setPageCount(pageSize.intValue());
         result.setData(MedicList);
         return result;
+    }
+
+    public List<MedicNewsInfo> selectAll() {
+        return medicNewsInfoMapper.selectAll();
     }
 }

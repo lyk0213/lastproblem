@@ -41,7 +41,7 @@
             </a>
                 <dl class="layui-nav-child">
                     <dd>
-                        <a id="" href="javascript:;">基本资料</a>
+                        <a id="ziliao1" href="javascript:;">基本资料</a>
                     </dd>
                     <dd>
                         <a id="user-logout" href="javascript:;">安全退出</a>
@@ -70,14 +70,12 @@
 
                     <dl class="layui-nav-child">
                         <dd><a id="infoA" href="javascript:;">学生信息</a></dd>
-                        <dd><a id="" href="javascript:;">历史病例查找</a></dd>
+                        <dd><a id="lishibinglichazhao" href="javascript:;">历史病例查找</a></dd>
                     </dl>
-
                 </li>
-
-                <li class="layui-nav-item">
-                    <a id="medical_manage" href="medical_manage.html">药品信息</a>
-                </li>
+<!--                <li class="layui-nav-item">-->
+<!--                    <a id="medical_manage" href="medical_manage.html">药品信息</a>-->
+<!--                </li>-->
 
                 <li class="layui-nav-item">
                     <a id="addstudent" href="manager_controstu.html">添加学生信息</a>
@@ -114,7 +112,6 @@
     layui.use(['element','layer'], function() {
         var element = layui.element;
         var layer = layui.layer;
-
         //从cookie中获取信息
         var adminName = $.cookie("adminName");
         var adminNum = $.cookie("adminNum");

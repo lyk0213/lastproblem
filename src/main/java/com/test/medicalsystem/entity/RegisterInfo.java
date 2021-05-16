@@ -15,10 +15,8 @@ public class RegisterInfo implements Serializable {
     private String illDate;
     private String treatmentType;
 
-    public void setIllDate(String illDate) {
-        this.illDate = illDate;
-    }
-
+    private String  stuTemperature;
+    private String  virusDetection;
 
 
     @Override
@@ -31,6 +29,8 @@ public class RegisterInfo implements Serializable {
                 ", illType='" + illType + '\'' +
                 ", illDate='" + illDate + '\'' +
                 ", treatmentType='" + treatmentType + '\'' +
+                ", stuTemperature='" + stuTemperature + '\'' +
+                ", virusDetection='" + virusDetection + '\'' +
                 '}';
     }
 
@@ -38,7 +38,9 @@ public class RegisterInfo implements Serializable {
         return illDate;
     }
 
-
+    public void setIllDate(String illDate) {
+        this.illDate = illDate;
+    }
 
 
     public Integer getRid() {
@@ -87,6 +89,22 @@ public class RegisterInfo implements Serializable {
 
     public void setTreatmentType(String treatmentType) {
         this.treatmentType = treatmentType;
+    }
+
+    public String getStuTemperature() {
+        return stuTemperature;
+    }
+
+    public void setStuTemperature(String stuTemperature) {
+        this.stuTemperature = stuTemperature;
+    }
+
+    public String getVirusDetection() {
+        return virusDetection;
+    }
+
+    public void setVirusDetection(String virusDetection) {
+        this.virusDetection = virusDetection;
     }
 
 }

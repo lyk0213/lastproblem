@@ -7,4 +7,6 @@ public interface PrescriptionInfoMapper {
     int insertPrescriptionInfo(PrescriptionInfo record);
     int updatePrescriptionInfoBystuRegister(PrescriptionInfo record);
     int deleteBystuRegister(String stuRegister);
+
+    PrescriptionInfo selectBystuRegister(String stuRegister);
 }

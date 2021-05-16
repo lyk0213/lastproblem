@@ -6,6 +6,7 @@ package com.test.medicalsystem.request;
 public class RegisterQuery {
     private String illDate;
     private String stuNum;
+    private String treatmentType;
     private Integer page = 1;//当前页
     private  Integer limit = 10;//初始默认每页显示10条数据
 
@@ -14,9 +15,18 @@ public class RegisterQuery {
         return "RegisterQuery{" +
                 "illDate='" + illDate + '\'' +
                 ", stuNum='" + stuNum + '\'' +
+                ", treatmentType='" + treatmentType + '\'' +
                 ", page=" + page +
                 ", limit=" + limit +
                 '}';
+    }
+
+    public String getTreatmentType() {
+        return treatmentType;
+    }
+
+    public void setTreatmentType(String treatmentType) {
+        this.treatmentType = treatmentType;
     }
 
     public String getStuNum() {

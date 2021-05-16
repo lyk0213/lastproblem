@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.test.medicalsystem.entity.RegisterInfo;
 import com.test.medicalsystem.request.RegisterQuery;
+import org.apache.ibatis.annotations.Param;
 
 public interface RegisterInfoMapper {
 
@@ -27,6 +28,8 @@ public interface RegisterInfoMapper {
     List<RegisterInfo>selectAllForDoc(RegisterQuery query);
 
     RegisterInfo  selectBystuRegister(String stuRegister);
+
+    RegisterInfo selectBytimeandNum(@Param("stuNum")String stuNum, @Param("illDate")String illDate);
 
 
 }

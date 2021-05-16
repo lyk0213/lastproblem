@@ -67,6 +67,13 @@
             <input type="text" name="stuInsure" class="layui-input" lay-verify="stuInsure" disabled="" title="不允许修改">
         </div>
     </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">当前余额</label>
+        <div class="layui-input-block">
+            <input type="text" name="stuBalance" class="layui-input" lay-verify="stuBalance" disabled="" title="不允许修改">
+        </div>
+    </div>
 <!--    学生自主查询中不允许修改，管理员可以进行管理-->
 
     <div class="layui-form-item">
@@ -168,7 +175,8 @@
                         stuTelephone: data.data.stuTelephone,
                         stuInsure: data.data.stuInsure,
                         stuSex: data.data.stuSex,
-                        stuAllergy: data.data.stuAllergy
+                        stuAllergy: data.data.stuAllergy,
+                        stuBalance: data.data.stuBalance
 
                     });
                     // $('#hImg').attr('src',data.data.headImg);，图片文件可以存在，后续增加？

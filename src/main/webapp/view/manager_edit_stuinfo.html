@@ -39,18 +39,13 @@
             <input type="password" name="stuPwd" class="layui-input" lay-verify="stuPwd" placeholder="不修改则不填">
         </div>
     </div>
-    <!--    可以改，需要在controller中进行查找并且保持原样-->
 
     <div class="layui-form-item">
         <label class="layui-form-label">生日</label>
         <div class="layui-input-block">
-            <!--            <input type="text" name="stuBirth"  id="stuBirth" class="layui-input" lay-verify="stuBirth" placeholder="按照格式yyyy-MM-dd">-->
             <input type="text" name="stuBirth" id="stuBirth" autocomplete="off" class="layui-input" placeholder="yyyy-MM-dd">
         </div>
     </div>
-    <!--    可以使用layui自带的时间表格，省时间，暂时不增加，后续可以考虑进行修改-->
-
-
 
     <div class="layui-form-item">
         <label class="layui-form-label">电话</label>
@@ -60,38 +55,21 @@
     </div>
 
 
-
     <div class="layui-form-item">
-        <label class="layui-form-label">是否医保</label>
+        <label class="layui-form-label">是否入医保</label>
         <div class="layui-input-block">
-            <input type="text" name="stuInsure" class="layui-input" lay-verify="stuInsure" disabled="" title="不允许修改">
+            <input type="radio" name="stuInsure" value="存在医保" title="存在医保">
+            <input type="radio" name="stuInsure" value="不存在医保" title="不存在医保" >
         </div>
     </div>
-    <!--    学生自主查询中不允许修改，管理员可以进行管理-->
 
     <div class="layui-form-item">
         <label class="layui-form-label">性别</label>
         <div class="layui-input-block">
             <input type="radio" name="stuSex" value="男" title="男">
             <input type="radio" name="stuSex" value="女" title="女" >
-            <!-- value传出的数值 -->
         </div>
     </div>
-
-
-    <!--    <div class="layui-form-item">-->
-    <!--        <label class="layui-form-label">选择框</label>-->
-    <!--        <div class="layui-input-block">-->
-    <!--            <select name="city" lay-verify="required">-->
-    <!--                <option value=""></option>-->
-    <!--                <option value="0">北京</option>-->
-    <!--                <option value="1">上海</option>-->
-    <!--                <option value="2">广州</option>-->
-    <!--                <option value="3">深圳</option>-->
-    <!--                <option value="4">杭州</option>-->
-    <!--            </select>-->
-    <!--        </div>-->
-    <!--    </div>-->
 
 
     <div class="layui-form-item layui-form-text">
@@ -107,33 +85,16 @@
             <button class="layui-btn" lay-submit lay-filter="formDemo">提交修改</button>
         </div>
     </div>
-    <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
 </form>
-
-<!--<script>-->
-<!--    layui.use('laydate', function(){-->
-<!--        var laydate = layui.laydate;-->
-
-<!--        //执行一个laydate实例-->
-<!--        laydate.render({-->
-<!--            elem: '#stuBirth' //指定元素-->
-<!--        });-->
-<!--    });-->
-<!--</script>-->
-
-
 
 <script type="text/javascript">
     layui.use(['element','layer','layedit','laydate','jquery','form','form','upload'], function(){
         var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
-
         var element = layui.element;
         var layer = layui.layer;
         var $ = layui.jquery;
-
 //        var layedit = layui.layedit;
         var laydate = layui.laydate;
-
         var upload = layui.upload;
         var form = layui.form;
 
@@ -143,12 +104,7 @@
             elem: '#stuBirth' //指定元素
             ,trigger: 'click' //防止日期组件闪退
         });
-        //     .render({
-        //     elem : '#stuBirth'
-        //     ,trigger: 'click' //防止日期组件闪退
-        // });
-
-
+        
 
         $.ajax({
             url: '../admincontroal/selectBystuNum',

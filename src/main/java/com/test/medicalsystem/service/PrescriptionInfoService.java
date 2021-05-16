@@ -6,4 +6,6 @@ public interface PrescriptionInfoService {
     void insertPrescriptionInfo(PrescriptionInfo record);
     void updatePrescriptionInfoBystuRegister(PrescriptionInfo record);
     void deleteBystuRegister(String stuRegister);
+
+    PrescriptionInfo selectBystuRegister(String stuRegister);
 }

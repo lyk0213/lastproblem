@@ -45,6 +45,13 @@
     </sql>
 
 
+<!--    查询全部-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from medic_news_info
+    </select>
+
 
 
     <!--    用户名进行查找信息-->
@@ -53,6 +60,15 @@
         <include refid="Base_Column_List"></include>
         from medic_news_info
         where medic_num = #{medicNum,jdbcType=VARCHAR}
+
+    </select>
+
+    <!--    用户名进行查找信息-->
+    <select id="selectBymedicName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"></include>
+        from medic_news_info
+        where medic_name = #{medicName,jdbcType=VARCHAR}
 
     </select>
 <!--    药品信息表-->

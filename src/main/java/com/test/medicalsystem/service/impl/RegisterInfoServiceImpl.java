@@ -36,10 +36,12 @@ public class RegisterInfoServiceImpl implements RegisterInfoService{
         List<RegisterInfo> RegisterList=registerInfoMapper.selectByQueryCondition(query);
         for (RegisterInfo Register : RegisterList) {
             if ("0".equals(Register.getTreatmentType())) {
-                Register.setTreatmentType("未就诊");
-//                System.out.println(Register.getTreatmentType());
+                Register.setTreatmentType("未挂号");
+//                System.out.println(Register.getTreatmentType());0为挂号，1为已挂号，2为已就诊
             }else if ("1".equals(Register.getTreatmentType())){
-                Register.setTreatmentType("就诊");
+                Register.setTreatmentType("已挂号");
+            }else if ("2".equals(Register.getTreatmentType())){
+                Register.setTreatmentType("已就诊");
             }
         }
         int totalCount=registerInfoMapper.selectTotalCount(query);//查询总数目
@@ -60,9 +62,11 @@ public class RegisterInfoServiceImpl implements RegisterInfoService{
 
         for (RegisterInfo Register : RegisterList) {
             if ("0".equals(Register.getTreatmentType())) {
-                Register.setTreatmentType("未就诊");
+                Register.setTreatmentType("未挂号");
             }else if ("1".equals(Register.getTreatmentType())){
-                Register.setTreatmentType("就诊");
+                Register.setTreatmentType("已挂号");
+            }else if ("2".equals(Register.getTreatmentType())){
+                Register.setTreatmentType("已就诊");
             }
         }
         int toCount1=registerInfoMapper.selectDocTotal(query);
@@ -83,6 +87,11 @@ public class RegisterInfoServiceImpl implements RegisterInfoService{
 
     public RegisterInfo selectBystuRegister(String stuRegister) {
         RegisterInfo registerInfo = registerInfoMapper.selectBystuRegister(stuRegister);
+        return registerInfo;
+    }
+
+    public RegisterInfo selectBytimeandNum(String stuNum, String illDate) {
+        RegisterInfo registerInfo = registerInfoMapper.selectBytimeandNum(stuNum, illDate);
         return registerInfo;
     }
 }

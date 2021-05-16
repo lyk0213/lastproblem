@@ -24,5 +24,6 @@ public interface RegisterInfoService {
 
     RegisterInfo  selectBystuRegister(String stuRegister);
 
+    RegisterInfo selectBytimeandNum(String stuNum,String illDate);
 
 }

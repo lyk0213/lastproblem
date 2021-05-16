@@ -26,4 +26,10 @@ public class PrescriptionInfoServiceImpl implements PrescriptionInfoService{
     public void deleteBystuRegister(String stuRegister) {
         prescriptionInfoMapper.deleteBystuRegister(stuRegister);
     }
+
+    public PrescriptionInfo selectBystuRegister(String stuRegister) {
+        PrescriptionInfo prescriptionInfo=prescriptionInfoMapper.selectBystuRegister(stuRegister);
+        return prescriptionInfo;
+    }
+
 }

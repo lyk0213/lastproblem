@@ -21,6 +21,15 @@
         medic_way,medic_money,advice_time
     </sql>
 
+    <!--    搜索通过病例单号表-->
+    <select id="selectBystuRegister" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"></include>
+        from prescription_info
+        where stu_register = #{stuRegister,jdbcType=VARCHAR}
+    </select>
+
+
 <!--    处方信息表-->
     <insert id="insertPrescriptionInfo" parameterType="com.test.medicalsystem.entity.PrescriptionInfo">
         insert into prescription_info

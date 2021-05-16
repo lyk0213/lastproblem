@@ -7,4 +7,6 @@ public interface MedicRecordInfoService {
     void insertMedicRecordInfo(MedicRecordInfo record);
     void updateMedicRecordInfoBystuRegister(MedicRecordInfo record);
     void deleteBystuRegister(String stuRegister);
+
+    MedicRecordInfo selectBystuRegister(String stuRegister);
 }

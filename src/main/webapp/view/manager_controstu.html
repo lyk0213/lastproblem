@@ -28,20 +28,18 @@
                         <input type="text" name="stuName" id="stuName" placeholder="请输入" autocomplete="off" class="layui-input">
                     </div>
                 </div>
-
-
+<!--                可以模糊查询-->
                 <div class="layui-inline">
-                    <!--                        <button class="layui-btn" type="button" id="searchBtn">查询</button>-->
+                    <!--   <button class="layui-btn" type="button" id="searchBtn">查询</button>-->
                     <button class="layui-btn layuiadmin-btn-useradmin" lay-submit
                             lay-filter="LAY-user-front-search" type="button" id="searchBtn">
                         <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                     </button>
                 </div>
-
                 <div class="layui-inline">
                     <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                 </div>
-
+<!--查找重置按钮-->
             </div>
         </form>
     </div>
@@ -71,7 +69,6 @@
         var element = layui.element;
         var $ = layui.jquery;
 
-
         // laydate.render({
         //     elem : '#Date1'
         // });
@@ -83,7 +80,7 @@
         var tableIns = table.render({
             elem : '#stuinfo',
             toolbar : '#toolBar',
-            height : 680,
+            height : 550,
             url : '../admincontroal/querystulist?adminNum='+adminNum,
             page : true, //开启分页
             cols : [ [ //表头
@@ -95,6 +92,7 @@
                 {field : 'stuTelephone',title : '学生电话',width : 150},
                 {field : 'stuAllergy',title : '学生过敏状况',width : 100},
                 {field : 'stuInsure',title : '学生医保类型',width : 100},
+                {field : 'stuBalance',title : '学生余额',width : 100},
                 {fixed : 'right',title : '操作功能',width : 138,align : 'center',toolbar : '#barDemo'}
             ] ]
         });

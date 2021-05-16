@@ -27,4 +27,9 @@ public class MedicRecordInfoServiceImpl implements MedicRecordInfoService{
         medicRecordInfoMapper.deleteBystuRegister(stuRegister);
 
     }
+
+    public MedicRecordInfo selectBystuRegister(String stuRegister) {
+        MedicRecordInfo medicRecordInfo=medicRecordInfoMapper.selectBystuRegister(stuRegister);
+        return medicRecordInfo;
+    }
 }

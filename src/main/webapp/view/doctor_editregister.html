@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>医生转预约</title>
+    <link rel="stylesheet" href="../static/layui/css/layui.css">
+    <script src="../static/js/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../static/js/jquery.cookie.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../static/layui/layui.js"></script>
+    <script src="../static/js/doctorconfig.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<form class="layui-form layui-form-pane"  action=""  lay-filter="form1">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">挂号单</label>
+        <div class="layui-input-block">
+            <input type="text" name="stuRegister" id="stuRegister" class="layui-input" disabled="" title="不允许修改">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">病人姓名</label>
+        <div class="layui-input-block">
+            <input type="text" name="stuName" lay-verify="stuName" class="layui-input" disabled="" title="不允许修改">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">病人账号</label>
+        <div class="layui-input-block">
+            <input type="text" name="stuNum" lay-verify="stuNum" class="layui-input" disabled="" title="不允许修改">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">挂号内容</label>
+        <div class="layui-input-block">
+            <select name="illType" id="illType" lay-verify="illType">
+                <option value=""></option>
+                <option value="内科">内科</option>
+                <option value="外科">外科</option>
+                <option value="发热门诊">发热门诊</option>
+            </select>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">挂号日期</label>
+        <div class="layui-input-block">
+            <input type="text" name="illDate" id="illDate" autocomplete="off" class="layui-input" placeholder="yyyy-MM-dd">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">当前体温</label>
+        <div class="layui-input-block">
+            <input type="text" name="stuTemperature" lay-verify="stuTemperature" class="layui-input"  title="请测量体温">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo">进行挂号</button>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    layui.use([ 'table','element','layedit', 'laydate','form','upload'],function() {
+        var table = layui.table;
+        var layer = layui.layer;
+        var layedit = layui.layedit;
+        var laydate = layui.laydate;
+        var form = layui.form;
+        var element = layui.element;
+        var upload = layui.upload;
+
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#illDate' //指定元素
+            ,trigger: 'click' //防止日期组件闪退
+        });
+
+        $.ajax({
+            url: '../register/queryByStr',
+            data: {stuRegister: $('#stuRegister').val()},
+            method: 'get',
+            success: function (data){
+                if (data.code==0){
+                    form.val('form1',{
+                        stuRegister: data.data.stuRegister,
+                        stuName: data.data.stuName,
+                        stuNum: data.data.stuNum,
+                        illType: data.data.illType,
+                        illDate: data.data.illDate,
+                        stuTemperature: data.data.stuTemperature,
+                    });
+                }else {
+                    layer.alert(data.msg);
+                }
+            },
+            error: function(data){
+                layer.alert(data.msg);
+            }
+        });
+
+        /**
+         * 表单提交
+         */
+
+        form.on('submit(formDemo)',function(data){
+            $.ajax({
+                url: '../register/updateRegister',
+                method: 'post',
+                data: data.field,
+                success: function(data){
+                    if(data.code==0){
+                        layer.msg("挂号成功。", {
+                            icon: 6,
+                            time: 1200,
+                            shade: 0.4
+                        },function(){
+                            var layerIndex = parent.layer.getFrameIndex(window.name);//获取当前iframe的索引
+                            parent.layer.close(layerIndex); //执行当前弹出窗口
+                            parent.layui.table.reload('registerinfo');//重新加载父页面的表格数据
+                        });
+                    }else{
+                        layer.msg(data.msg);
+                    }
+                },
+                error: function(){
+                    layer.msg("服务器内部错误");
+                }
+            });
+            return false; //去掉该行layer不关闭
+        });
+        form.render();//更新信息
+    });
+
+</script>
+
+</body>
+</html>

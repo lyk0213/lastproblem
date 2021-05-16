@@ -25,7 +25,7 @@
                     </div>
 
                     <div class="layui-inline">
-                        <label class="layui-form-label">申请时间</label>
+                        <label class="layui-form-label">挂号时间</label>
                         <div class="layui-input-inline" style="width: 100px;">
                             <input type="text" name="Date1" id="Date1" autocomplete="off" class="layui-input" placeholder="yyyy-MM-dd">
                         </div>
@@ -33,10 +33,7 @@
 
                     <div class="layui-inline">
                         <button class="layui-btn" type="button" id="searchBtn">查询</button>
-                        <button class="layui-btn layui-btn-normal" type="reset">重置</button>
-<!--                        <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-search">-->
-<!--                            <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>-->
-<!--                        </button>-->
+<!--                        <button class="layui-btn layui-btn-normal" type="reset">重置</button>-->
                     </div>
                 </div>
             </div>
@@ -53,12 +50,9 @@
     </script>
 
     <script type="text/html" id="barDemo">
-
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="down">删除</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="showinfo">查看结果</a>
     </script>
-<!--上述表单内操作-->
-<!--    <a class="layui-btn                  layui-btn-xs" lay-event="edit">查看</a>-->
-
 </div>
 
 
@@ -90,7 +84,7 @@
         var tableIns = table.render({
             elem : '#registerinfo',
             toolbar : '#toolBar',
-            height : 680,
+            height : 520,
             url : '../register/query?stuNum='+stuNum, //数据接口
             page : true, //开启分页
             cols : [ [ //表头
@@ -121,7 +115,6 @@
             })
         });
 
-
         //监听表格工具头
         table.on('toolbar(registerinfo)', function(obj){
             var checkStatus = table.checkStatus(obj.config.id);
@@ -130,18 +123,34 @@
             };
         });
 
-
         //监听表格按钮事件
         table.on('tool(registerinfo)',function(obj){
             var data = obj.data; //获取表格行数据
              if(obj.event == 'down'){
                 obj.del();
                 deleteRegister(data);
-            }
+            }else if (obj.event == 'showinfo'){
+                 showinfo(data);
+             }
         });
 
+        function showinfo(data){
+            layer.open({
+                type: 2,
+                title: '查看就诊结果',
+                area: ['800px','600px'],
+                fixed: false,
+                maxmin: true,
+                content: 'student_show_preinfo.html',
+                success:function (layero,index){
+                    var body =layer.getChildFrame('body',index);
+                    body.find('#stuRegister').val(data.stuRegister);
+                }
+            });
+        };
+
+
         function deleteRegister(data){
-            //controller还未进行编写，只是写了前端的页面部分
             $.ajax({
                 url: '../register/registerdown?stuRegister='+data.stuRegister,
                 success: function(data1) {
@@ -151,7 +160,6 @@
                         layer.alert("请求失败，请稍后重试");
                     }
                 },
-
                 error: function(data1) {
                     layer.alert("服务器内部错误");
                 }

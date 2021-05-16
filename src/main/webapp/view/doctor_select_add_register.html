@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>医生挂号工作</title>
+    <link   href="../static/layui/css/layui.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="../static/layui/layui.js"></script>
+    <script type="text/javascript" src="../static/js/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript" src="../static/js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../static/js/doctorconfig.js"></script>
+</head>
+<body>
+<div>
+    <div class="demoTable">
+        <form class="layui-form"  lay-filter="form1">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">挂号日期</label>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="text" name="Date1" id="Date1" autocomplete="off" class="layui-input" placeholder="yyyy-MM-dd">
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit
+                            lay-filter="LAY-user-front-search" type="button" id="searchBtn">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+                <div class="layui-inline">
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <table id="registerinfo" lay-filter="registerinfo"></table>
+
+    <script type="text/html" id="toolBar">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="addRegister">增加挂号</button>
+            <button class="layui-btn layui-btn-sm" lay-event="reloadTable">刷新表格</button>
+        </div>
+    </script>
+
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="updateRegister">预约挂号</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+    </script>
+</div>
+
+<script type="text/javascript">
+    layui.use(['table', 'element', 'layedit', 'laydate', 'form', 'jquery'], function () {
+        var table = layui.table;
+        var layer = layui.layer;
+        var layedit = layui.layedit;
+        var laydate = layui.laydate;
+        var form = layui.form;
+        var element = layui.element;
+        var $ = layui.jquery;
+
+        laydate.render({
+            elem : '#Date1'
+        });
+
+
+        //数据表格渲染，sort，开启当前表格内的状态
+        var tableIns = table.render({
+            elem: '#registerinfo',
+            toolbar: '#toolBar',
+            height: 500,
+            url: '../register/queryNovisit',
+            page: true,
+            cols :[[
+                {field : 'stuNum',title : '挂号学生id',width : 140,sort: true},
+                {field : 'stuName',title : '挂号学生姓名',width : 140},
+                {field : 'stuRegister',title : '挂号单',width : 140},
+                {field : 'illType',title : '挂号类型',width : 140},
+                {field : 'illDate',title : '预约时间',width : 150},
+                {field : 'treatmentType',title : '当前处理状况',width : 100},
+                {fixed : 'right',title : '挂号操作',width : 190,align : 'center',toolbar : '#barDemo'},
+            ]]
+        });
+
+        /* 查询按钮 */
+        $('#searchBtn').click(function(){
+            layer.msg('请稍后...',{
+                icon:16,
+                time:800,
+                shade:0,
+            },function(){
+                tableIns.reload({
+                    where:{
+                        illDate: $('#Date1').val(),
+                    },page:{
+                        page: 1
+                    }
+                })
+            })
+        });
+
+        //表格上方按钮控制,boolBar无法打开，应与上面的数据表格中的toolbar对应
+        table.on('toolbar(registerinfo)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'reloadTable': tableIns.reload();break;
+                case 'addRegister': addregister();break;
+            };
+        });
+
+        function addregister() {
+            layer.open({
+                title: '当日挂号患者',
+                type: 2,
+                area:['600px','500px'],
+                fixed: false,//固定
+                anim: 3,
+                maxmin: true,
+                content:'doctor_addregister.html'//当日挂号增加页面
+            });
+        };
+//                anim: 2,//从低向上
+
+        //表格上方按钮事件
+        table.on('tool(registerinfo)',function (obj) {
+            var data = obj.data;
+            if (obj.event == 'updateRegister'){
+                updateRegister(data);
+            }else if (obj.event == 'delete'){
+                obj.del();
+                deleteInfo(data);
+            }
+        });
+
+        function updateRegister(data){
+            layer.open({
+                title:'添加温度信息',
+                type: 2,
+                area:['600px','500px'],
+                fixed: false,//固定
+                anim: 2,//从低向上
+                maxmin: true,
+                content:'doctor_editregister.html',//当日挂号增加页面
+                success:function (layero,index) {
+                    var body =layer.getChildFrame('body',index);
+                    body.find('#stuRegister').val(data.stuRegister);
+                }
+            })
+        };
+        //
+
+
+        function deleteInfo(data){
+            $.ajax({
+                url:'../register/registerdown?stuRegister='+data.stuRegister,
+                success:function (data1){
+                    if (data1.code == 0){
+                        layer.msg("此挂号单"+data.stuRegister+"已被删除");
+                    }else {
+                        layer.alert("请求失败，请稍后重试");
+                    }
+                },
+                error: function (data1) {
+                    layer.alert("服务器内部错误");
+                }
+            });
+        };
+    });
+</script>
+</body>
+</html>

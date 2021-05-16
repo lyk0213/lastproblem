@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.medicalsystem.mapper.DrugOutListMapper">
+    <resultMap id="BaseResultMap" type="com.test.medicalsystem.entity.DrugOut">
+        <id column="zid" jdbcType="INTEGER" property="zid"/>
+        <result column="stu_register" jdbcType="VARCHAR" property="stuRegister"/>
+        <result column="doc_num" jdbcType="VARCHAR" property="docNum"/>
+        <result column="doc_name" jdbcType="VARCHAR" property="docName"/>
+        <result column="stu_num" jdbcType="VARCHAR" property="stuNum"/>
+        <result column="stu_name" jdbcType="VARCHAR" property="stuName"/>
+        <result column="diagnostic_results" jdbcType="VARCHAR" property="diagnosticResults"/>
+        <result column="medic_num1" jdbcType="VARCHAR" property="medicNum1"/>
+        <result column="medic_name1" jdbcType="VARCHAR" property="medicName1"/>
+        <result column="medic_amount1" jdbcType="INTEGER" property="medicAmount1"/>
+        <result column="medic_num2" jdbcType="VARCHAR" property="medicNum2"/>
+        <result column="medic_name2" jdbcType="VARCHAR" property="medicName2"/>
+        <result column="medic_amount2" jdbcType="INTEGER" property="medicAmount2"/>
+        <result column="medic_num3" jdbcType="VARCHAR" property="medicNum3"/>
+        <result column="medic_name3" jdbcType="VARCHAR" property="medicName3"/>
+        <result column="medic_amount3" jdbcType="INTEGER" property="medicAmount3"/>
+        <result column="stu_insure" jdbcType="VARCHAR" property="stuInsure"/>
+        <result column="end_money" jdbcType="DOUBLE" property="endMoney"/>
+        <result column="pay_type" jdbcType="VARCHAR" property="payType"/>
+        <result column="pay_time" jdbcType="VARCHAR" property="payTime"/>
+        <result column="pay_thing" jdbcType="VARCHAR" property="payThing"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        zid,stu_register,doc_num,doc_name,stu_num,stu_name,diagnostic_results
+        ,medic_num1,medic_name1,medic_amount1,medic_num2,medic_name2,medic_amount2
+        ,medic_num3,medic_name3,medic_amount3,stu_insure,end_money,pay_type,pay_time,pay_thing
+    </sql>
+
+    <sql id="Base_Column_List1">
+        zid,stu_register,stu_num,stu_name,diagnostic_results
+        ,stu_insure,end_money,pay_type,pay_time,pay_thing
+    </sql>
+
+<!--    新增加的处方表 进行分页查询-->
+    <select id="selectByQueryCondition"
+            parameterType="com.test.medicalsystem.request.DrugListQuery"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from drug_out_list
+        where 1=1
+        <include refid="queryCondition"/>
+        order by zid
+        limit #{page},#{limit}
+    </select>
+    <select id="selectTotalCount"
+            parameterType="com.test.medicalsystem.request.DrugListQuery"
+            resultType="java.lang.Integer">
+        select
+        count(1)
+        from drug_out_list
+        where 1=1
+        <include refid="queryCondition"/>
+    </select>
+<!--    查询条件-->
+    <sql id="queryCondition">
+        <if test="stuNum!=null and stuNum !=''">
+            and stu_num = #{stuNum,jdbcType=VARCHAR}
+        </if>
+        <if test="stuRegister!=null and stuRegister!=''">
+            and stu_register = #{stuRegister,jdbcType=VARCHAR}
+        </if>
+        <if test="payType!=null and payType!=''">
+            and pay_type = #{payType,jdbcType=VARCHAR}
+        </if>
+        <if test="payThing!=null and payThing!=''">
+            and pay_thing = #{payThing,jdbcType=VARCHAR}
+        </if>
+    </sql>
+
+
+
+
+
+
+
+
+
+
+    <!--通过病历单号查找-->
+    <select id="selectBystuRegister" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"></include>
+        from drug_out_list
+        where stu_register = #{stuRegister,jdbcType=VARCHAR}
+    </select>
+<!--    增加当前处方开具表-->
+    <insert id="insertDrugList" parameterType="com.test.medicalsystem.entity.DrugOut">
+        insert into drug_out_list
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="zid !=null">
+                zid,
+            </if>
+            <if test="stuRegister !=null">
+                stu_register,
+            </if>
+            <if test="docNum !=null">
+                doc_num,
+            </if>
+            <if test="docName !=null">
+                doc_name,
+            </if>
+            <if test="stuNum !=null">
+                stu_num,
+            </if>
+            <if test="stuName !=null">
+                stu_name,
+            </if>
+            <if test="diagnosticResults !=null">
+                diagnostic_results,
+            </if>
+            <if test="medicNum1 !=null">
+                medic_num1,
+            </if>
+            <if test="medicName1 !=null">
+                medic_name1,
+            </if>
+            <if test="medicAmount1 !=null">
+                medic_amount1,
+            </if>
+            <if test="medicNum2 !=null">
+                medic_num2,
+            </if>
+            <if test="medicName2 !=null">
+                medic_name2,
+            </if>
+            <if test="medicAmount2 !=null">
+                medic_amount2,
+            </if>
+            <if test="medicNum3 !=null">
+                medic_num3,
+            </if>
+            <if test="medicName3 !=null">
+                medic_name3,
+            </if>
+            <if test="medicAmount3 !=null">
+                medic_amount3,
+            </if>
+            <if test="stuInsure !=null">
+                stu_insure,
+            </if>
+            <if test="endMoney !=null">
+                end_money,
+            </if>
+            <if test="payType !=null">
+                pay_type,
+            </if>
+            <if test="payTime !=null">
+                pay_time,
+            </if>
+            <if test="payThing !=null">
+                pay_thing,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="zid !=null">
+                #{zid,jdbcType=INTEGER},
+            </if>
+            <if test="stuRegister !=null">
+                #{stuRegister,jdbcType=VARCHAR},
+            </if>
+            <if test="docNum !=null">
+                #{docNum,jdbcType=VARCHAR},
+            </if>
+            <if test="docName !=null">
+                #{docName,jdbcType=VARCHAR},
+            </if>
+            <if test="stuNum !=null">
+                #{stuNum,jdbcType=VARCHAR},
+            </if>
+            <if test="stuName !=null">
+                #{stuName,jdbcType=VARCHAR},
+            </if>
+            <if test="diagnosticResults !=null">
+                #{diagnosticResults,jdbcType=VARCHAR},
+            </if>
+            <if test="medicNum1 !=null">
+                #{medicNum1,jdbcType=VARCHAR},
+            </if>
+            <if test="medicName1 !=null">
+                #{medicName1,jdbcType=VARCHAR},
+            </if>
+            <if test="medicAmount1 !=null">
+                #{medicAmount1,jdbcType=INTEGER},
+            </if>
+            <if test="medicNum2 !=null">
+                #{medicNum2,jdbcType=VARCHAR},
+            </if>
+            <if test="medicName2 !=null">
+                #{medicName2,jdbcType=VARCHAR},
+            </if>
+            <if test="medicAmount2 !=null">
+                #{medicAmount2,jdbcType=INTEGER},
+            </if>
+            <if test="medicNum3 !=null">
+                #{medicNum3,jdbcType=VARCHAR},
+            </if>
+            <if test="medicName3 !=null">
+                #{medicName3,jdbcType=VARCHAR},
+            </if>
+            <if test="medicAmount3 !=null">
+                #{medicAmount3,jdbcType=INTEGER},
+            </if>
+            <if test="stuInsure !=null">
+                #{stuInsure,jdbcType=VARCHAR},
+            </if>
+            <if test="endMoney !=null">
+                #{endMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="payType !=null">
+                #{payType,jdbcType=VARCHAR},
+            </if>
+            <if test="payTime !=null">
+                #{payTime,jdbcType=VARCHAR},
+            </if>
+            <if test="payThing !=null">
+                #{payThing,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+<!--    更新-->
+    <update id="updateDrugOutBystuRegister" parameterType="com.test.medicalsystem.entity.DrugOut">
+        update drug_out_list
+        <set>
+            <if test="docNum !=null">
+                doc_num = #{docNum,jdbcType=VARCHAR},
+            </if>
+            <if test="docName !=null">
+                doc_name = #{docName,jdbcType=VARCHAR},
+            </if>
+            <if test="stuNum !=null">
+                stu_num = #{stuNum,jdbcType=VARCHAR},
+            </if>
+            <if test="stuName !=null">
+                stu_name = #{stuName,jdbcType=VARCHAR},
+            </if>
+            <if test="diagnosticResults !=null">
+                diagnostic_results = #{diagnosticResults,jdbcType=VARCHAR},
+            </if>
+            <if test="medicNum1 !=null">
+                medic_num1 = #{medicNum1,jdbcType=VARCHAR},
+            </if>
+            <if test="medicName1 !=null">
+                medic_name1 = #{medicName1,jdbcType=VARCHAR},
+            </if>
+            <if test="medicAmount1 !=null">
+                medic_amount1 = #{medicAmount1,jdbcType=INTEGER},
+            </if>
+            <if test="medicNum2 !=null">
+                medic_num2 = #{medicNum2,jdbcType=VARCHAR},
+            </if>
+            <if test="medicName2 !=null">
+                medic_name2 = #{medicName2,jdbcType=VARCHAR},
+            </if>
+            <if test="medicAmount2 !=null">
+                medic_amount2 = #{medicAmount2,jdbcType=INTEGER},
+            </if>
+            <if test="medicNum3 !=null">
+                medic_num3 = #{medicNum3,jdbcType=VARCHAR},
+            </if>
+            <if test="medicName3 !=null">
+                medic_name3 = #{medicName3,jdbcType=VARCHAR},
+            </if>
+            <if test="medicAmount3 !=null">
+                medic_amount3 = #{medicAmount3,jdbcType=INTEGER},
+            </if>
+            <if test="stuInsure !=null">
+                stu_insure = #{stuInsure,jdbcType=VARCHAR},
+            </if>
+            <if test="endMoney !=null">
+                end_money = #{endMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="payType !=null">
+                pay_type = #{payType,jdbcType=VARCHAR},
+            </if>
+            <if test="payTime !=null">
+                pay_time = #{payTime,jdbcType=VARCHAR},
+            </if>
+            <if test="payThing !=null">
+                pay_thing = #{payThing,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where
+        stu_register = #{stuRegister,jdbcType=VARCHAR}
+    </update>
+
+<!--    删除By病例单编号-->
+    <delete id="deleteBystuRegister" parameterType="java.lang.String">
+        delete from drug_out_list
+        where
+        stu_register = #{stuRegister,jdbcType=VARCHAR}
+    </delete>
+
+
+
+</mapper>
+    

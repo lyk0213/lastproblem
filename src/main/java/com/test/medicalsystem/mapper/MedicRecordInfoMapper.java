@@ -8,4 +8,5 @@ public interface MedicRecordInfoMapper {
     int updateMedicRecordInfoBystuRegister(MedicRecordInfo record);
     int deleteBystuRegister(String stuRegister);
 
+    MedicRecordInfo selectBystuRegister(String stuRegister);
 }

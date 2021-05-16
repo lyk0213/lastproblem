@@ -9,7 +9,8 @@ function userLogout(){
                 //移除cookie.前面传入的cookie
                 $.cookie("adminName",null,{path:"/MedicalSystem",expires:-1});
                 $.cookie("adminNum",null,{path:"/MedicalSystem",expires:-1});
-
+                $.removeCookie("adminName");
+                $.removeCookie("adminNum");
                 // $.cookie("adminName",null,{path:"/BookMSv3",expires:-1});
                 // $.cookie("adminId",null,{path:"/BookMSv3",expires:-1});
                 // $.cookie("adminImg",null,{path:"/BookMSv3",expires:-1});

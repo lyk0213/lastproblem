@@ -17,6 +17,10 @@ public interface MedicNewsInfoMapper {
 
     //通过查询药物编号返回药物信息
     MedicNewsInfo selectBymedicNum (String medicNum);
+    //通过查询药物名称返回药物信息
+    MedicNewsInfo selectBymedicName(String medicName);
 
+    //查询全部返回药物信息
+    List<MedicNewsInfo> selectAll();
 
 }

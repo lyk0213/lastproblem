@@ -39,6 +39,15 @@ public class ConfigUtil {
     public static final Integer ERROR_CODE = 5;
     public static final String ERROR_MSG = "服务器内部错误";
 
+
+    /**
+     * 状态码： 4
+     * 已经存在该条数据
+     */
+    public static final Integer FAILED_ADD_CODE = 4;
+    public static final String FAILED_ADD_MSG = "服务器中数据已经存在";
+
+
 //    /**
 //     * 学生状态码 102 老师101 管理员100
 //     *

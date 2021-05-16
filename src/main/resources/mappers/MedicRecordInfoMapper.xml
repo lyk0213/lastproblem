@@ -17,6 +17,12 @@
     </sql>
 
 <!--    病例信息表-->
+    <select id="selectBystuRegister" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"></include>
+        from medic_record_info
+        where stu_register = #{stuRegister,jdbcType=VARCHAR}
+    </select>
 
 <!--    增加病例-->
     <insert id="insertMedicRecordInfo" parameterType="com.test.medicalsystem.entity.MedicRecordInfo">

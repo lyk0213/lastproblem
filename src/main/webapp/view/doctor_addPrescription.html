@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加处方单</title>
+    <link rel="stylesheet" href="../static/layui/css/layui.css">
+    <script src="../static/js/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../static/js/jquery.cookie.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../static/layui/layui.js"></script>
+    <script src="../static/js/doctorconfig.js" type="text/javascript"
+            charset="utf-8"></script>
+</head>
+<body>
+<form class="layui-form  layui-form-pane"  action=""  lay-filter="form1">
+    <div class="layui-form-item">
+        <label class="layui-form-label">病单号</label>
+        <div class="layui-input-block">
+            <input type="text" name="stuRegister" id="stuRegister" class="layui-input" disabled="" title="不允许修改">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">病人账号</label>
+        <div class="layui-input-block">
+            <input type="text" name="stuNum" lay-verify="stuNum" class="layui-input" disabled="" title="不允许修改">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">病人姓名</label>
+        <div class="layui-input-block">
+            <input type="text" name="stuName" lay-verify="stuName" class="layui-input" disabled="" title="不允许修改">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">医师账号</label>
+        <div class="layui-input-block">
+            <input type="text" name="docNum" lay-verify="docNum" class="layui-input" disabled="" title="不允许修改">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">医师姓名</label>
+        <div class="layui-input-block">
+            <input type="text" name="docName" lay-verify="docName" class="layui-input" disabled="" title="不允许修改">
+        </div>
+    </div>
+<!--    <div class="layui-form-item layui-form-text">-->
+<!--        <label class="layui-form-label">诊断结果:</label>-->
+<!--        <div class="layui-input-block">-->
+<!--            <textarea placeholder="请输入诊断结果" class="layui-textarea" name="diagnosticResults" lay-verify="diagnosticResults"></textarea>-->
+<!--        </div>-->
+<!--    </div>-->
+
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">开具药物:</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入药物信息，药物开具不得超过三种" class="layui-textarea" name="medicNews" lay-verify="medicNews"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">药物使用方式:</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入使用方式" class="layui-textarea" name="medicWay" lay-verify="medicWay"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="addForm">提交结果</button>
+        </div>
+    </div>
+</form>
+
+
+<script type="text/javascript">
+    layui.use([ 'table','element','layedit', 'laydate','form','upload'],function() {
+        var table = layui.table;
+        var layer = layui.layer;
+        var layedit = layui.layedit;
+        var laydate = layui.laydate;
+        var form = layui.form;
+        var element = layui.element;
+        var upload = layui.upload;
+
+        var docNum = $.cookie("docNum");
+        var docName = $.cookie("docName");
+
+        //通过传入的信息将信息动态放入表单中
+        $(document).ready(function() {
+            $.ajax({
+                url: '../docinfo/selectBystuRegister',
+                data: {stuRegister: $('#stuRegister').val()},
+                success: function(data) {
+                    if(data.code==0){
+                        /* 表单赋值 */
+                        form.val('form1',{
+                            stuRegister: data.data.stuRegister,
+                            stuNum: data.data.stuNum,
+                            stuName: data.data.stuName,
+                            docNum: docNum,
+                            docName: docName
+                        });
+                    }
+                },
+                error: function(){
+                    layer.msg("服务器内部错误");
+                }
+            })
+        });
+
+        //表单提交
+        form.on('submit(addForm)',function(data){
+            $.ajax({
+                url: '../docinfo/addPrescription',
+                method: 'post',
+                data: data.field,
+                success: function(data){
+                    if(data.code==0){
+                        layer.msg("添加成功", {
+                            icon: 6,
+                            time: 1200,
+                            shade: 0.4
+                        }, function() {
+                            var layerIndex = parent.layer.getFrameIndex(window.name);//获取当前iframe的索引
+                            parent.layer.close(layerIndex); //执行当前弹出窗口
+                            parent.layui.table.reload('registerinfo');//重新加载父页面的表格数据
+                        });
+                    }else if(data.code == 1){
+                        layer.msg(data.msg);
+                        parent.window.location.href="../login.html"; //session失效返回登录页
+                    }else{
+                        layer.msg(data.msg);
+                    }
+                },
+                error: function(){
+                    layer.msg("服务器内部错误");
+                }
+            });
+            return false; //去掉该行layer不关闭
+        });
+
+    });
+</script>
+
+</body>
+</html>

@@ -10,32 +10,36 @@
         <result column="ill_type" jdbcType="VARCHAR" property="illType"/>
         <result column="ill_date" jdbcType="VARCHAR" property="illDate"/>
         <result column="treatment_type" jdbcType="VARCHAR" property="treatmentType"/>
+        <result column="stu_temperature" jdbcType="VARCHAR" property="stuTemperature"/>
+        <result column="virus_detection" jdbcType="VARCHAR" property="virusDetection"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        rid,stu_num,stu_name,stu_register,ill_type,ill_date,treatment_type
+        rid,stu_num,stu_name,stu_register,ill_type,ill_date,treatment_type,stu_temperature,virus_detection
     </sql>
 
 <!--    学生，查询挂号单-->
+<!--    对挂号的性质，进行查询  treatment_type=0 and -->
     <select id="selectByQueryCondition"
             parameterType="com.test.medicalsystem.request.RegisterQuery"
             resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from register_info
-        where treatment_type=0 and stu_num = #{stuNum,jdbcType=VARCHAR}
+        where  stu_num = #{stuNum,jdbcType=VARCHAR}
         <include refid="queryCondition"/>
         order by rid
         limit #{page},#{limit}
     </select>
 
+<!--    treatment_type=0  and-->
     <select id="selectTotalCount"
             parameterType="com.test.medicalsystem.request.RegisterQuery"
             resultType="java.lang.Integer">
         select
         count(1)
         from register_info
-        where   treatment_type=0  and stu_num = #{stuNum,jdbcType=VARCHAR}
+        where   stu_num = #{stuNum,jdbcType=VARCHAR}
         <include refid="queryCondition"/>
     </select>
 
@@ -54,6 +58,7 @@
         select
         <include refid="Base_Column_List"/>
         from register_info
+        where 1=1
         <include refid="queryConditionOnlyDate"/>
         order by rid
         limit #{page},#{limit}
@@ -65,12 +70,16 @@
         select
         count(1)
         from register_info
+        where 1=1
         <include refid="queryConditionOnlyDate"/>
     </select>
 
     <sql id="queryConditionOnlyDate">
         <if test="illDate!=null and illDate !=''">
-            where ill_date = #{illDate,jdbcType=VARCHAR}
+            and ill_date = #{illDate,jdbcType=VARCHAR}
+        </if>
+        <if test="treatmentType!=null and treatmentType !=''">
+            and treatment_type != #{treatmentType,jdbcType=VARCHAR}
         </if>
     </sql>
 
@@ -85,7 +94,13 @@
 
 
 
-
+    <select id="selectBytimeandNum" parameterType="com.test.medicalsystem.request.RegisterQuery" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from register_info
+        where   stu_num = #{stuNum}
+        and     ill_date = #{illDate}
+    </select>
 
 
 
@@ -114,6 +129,12 @@
             <if test="treatmentType !=null">
                 treatment_type,
             </if>
+            <if test="stuTemperature !=null">
+                stu_temperature,
+            </if>
+            <if test="virusDetection !=null">
+                virus_detection,
+            </if>
         </trim>
 
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -138,6 +159,12 @@
             <if test="treatmentType !=null">
                 #{treatmentType,jdbcType=VARCHAR},
             </if>
+            <if test="stuTemperature !=null">
+                #{stuTemperature,jdbcType=VARCHAR},
+            </if>
+            <if test="virusDetection !=null">
+                #{virusDetection,jdbcType=VARCHAR},
+            </if>
         </trim>
     </insert>
 
@@ -160,8 +187,15 @@
             <if test="treatmentType !=null">
                 treatment_type = #{treatmentType,jdbcType=VARCHAR},
             </if>
-
+            <if test="stuTemperature !=null">
+                stu_temperature = #{stuTemperature,jdbcType=VARCHAR},
+            </if>
+            <if test="virusDetection !=null">
+                virus_detection = #{virusDetection,jdbcType=VARCHAR},
+            </if>
         </set>
+        where
+        stu_register = #{stuRegister,jdbcType=VARCHAR}
     </update>
 
     <delete id="deleteBystuRegister" parameterType="java.lang.String">

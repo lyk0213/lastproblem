@@ -13,6 +13,8 @@ public class StuInfo implements Serializable{
     private String stuAllergy;
     private String stuInsure;
 
+    private Double stuBalance;
+
     @Override
     public String toString() {
         return "StuInfo{" +
@@ -26,9 +28,9 @@ public class StuInfo implements Serializable{
                 ", stuTelephone='" + stuTelephone + '\'' +
                 ", stuAllergy='" + stuAllergy + '\'' +
                 ", stuInsure='" + stuInsure + '\'' +
+                ", stuBalance=" + stuBalance +
                 '}';
     }
-
     public String getStuSex() {
         return stuSex;
     }
@@ -108,6 +110,14 @@ public class StuInfo implements Serializable{
 
     public void setStuPwd(String stuPwd) {
         this.stuPwd = stuPwd;
+    }
+
+    public Double getStuBalance() {
+        return stuBalance;
+    }
+
+    public void setStuBalance(Double stuBalance) {
+        this.stuBalance = stuBalance;
     }
 
 }

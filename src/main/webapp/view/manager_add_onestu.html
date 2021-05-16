@@ -45,8 +45,6 @@
         </div>
     </div>
 
-
-
     <div class="layui-form-item">
         <label class="layui-form-label">电话</label>
         <div class="layui-input-block">
@@ -55,11 +53,11 @@
     </div>
 
 
-
     <div class="layui-form-item">
-        <label class="layui-form-label">是否医保</label>
+        <label class="layui-form-label">是否入医保</label>
         <div class="layui-input-block">
-            <input type="text" name="stuInsure" class="layui-input" lay-verify="stuInsure" >
+            <input type="radio" name="stuInsure" value="存在医保" title="存在医保">
+            <input type="radio" name="stuInsure" value="不存在医保" title="不存在医保" >
         </div>
     </div>
 
@@ -83,15 +81,10 @@
 
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn" lay-submit lay-filter="addForm">提交修改</button>
-            <!--      <button type="reset" class="layui-btn layui-btn-primary">重置</button> -->
+            <button class="layui-btn" lay-submit lay-filter="addForm">增加学生信息</button>
         </div>
     </div>
-    <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
 </form>
-
-
-
 
 
 <script type="text/javascript">
@@ -126,18 +119,15 @@
                             icon: 6,
                             time: 1200,
                             shade: 0.4
-                        }
-                        // , function() {
-                        //     var layerIndex = parent.layer.getFrameIndex(window.name);//获取当前iframe的索引
-                        //     parent.layer.close(layerIndex); //执行当前弹出窗口
-                        //     parent.layui.table.reload('bookinfo');//重新加载父页面的表格数据
-                        // }
-                        );
+                        }, function() {
+                            var layerIndex = parent.layer.getFrameIndex(window.name);//获取当前iframe的索引
+                            parent.layer.close(layerIndex); //执行当前弹出窗口
+                            parent.layui.table.reload('stuinfo');//重新加载父页面的表格数据
+                        });
                     }
-                    // else if(data.code == 1){
-                    //     layer.msg(data.msg);
-                    //     parent.window.location.href="../login.html"; //session失效返回登录页
-                    // }登录过期，或者不是管理员登录
+                    else if(data.code == 1){
+                        layer.msg(data.msg);
+                    }
                     else{
                         layer.msg(data.msg);
                     }

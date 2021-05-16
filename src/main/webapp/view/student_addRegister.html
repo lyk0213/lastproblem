@@ -32,8 +32,8 @@
                 <select name="illType" id="illType" lay-verify="illType">
                     <option value=""></option>
                     <option value="外伤">外伤</option>
-                    <option value="感冒">感冒</option>
                     <option value="内伤">内伤</option>
+                    <option value="发热症状">发热症状</option>
                 </select>
             </div>
         </div>
@@ -42,7 +42,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">挂号日期</label>
         <div class="layui-input-block">
-            <input type="text" name="illDate" id="illDate" autocomplete="off" class="layui-input" placeholder="yyyy-MM-dd">
+            <input type="text" name="illDate" id="illDate"  required lay-verify="required" autocomplete="off" class="layui-input" placeholder="yyyy-MM-dd">
         </div>
     </div>
 
@@ -111,13 +111,13 @@
                 data: data.field,
                 success: function(data){
                     if(data.code==0){
-                        layer.msg("挂号成功。", {
+                        layer.msg(data.msg, {
                                 icon: 6,
                                 time: 1200,
                                 shade: 0.4
                             });
                     }else{
-                        layer.msg("修改失败，请重试");
+                        layer.msg(data.msg);
                     }
                 },
                 error: function(){
@@ -126,8 +126,6 @@
             });
             return false; //去掉该行layer不关闭
         });
-        //但是，如果你的HTML是动态生成的，自动渲染就会失效
-        //因此你需要在相应的地方，执行下述方法来进行渲染
         form.render();//更新信息
     });
 </script>

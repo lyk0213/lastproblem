@@ -239,10 +239,20 @@ public class ManagerController {
     public Result<String> insertStuinfo(StuInfo stuInfo, HttpSession session) {
         Result<String> result = new Result<String>();
         try {
-
             stuInfo.setStuType("2");
-            stuInfoService.insertStuInfo(stuInfo);
-            result.setData("添加成功");
+            String stuNum = stuInfo.getStuNum();
+            StuInfo stu1 = stuInfoService.selectBystuNum(stuNum);
+            if (stu1 ==null) {
+                double sum = 500;
+                stuInfo.setStuBalance(sum);
+                stuInfoService.insertStuInfo(stuInfo);
+                result.setData("添加成功");
+                result.setMsg("添加学生信息成功");
+                result.setCode(ConfigUtil.SUCCESS_CODE);
+            }else {
+                result.setMsg("账号已经存在");
+                result.setCode(ConfigUtil.FAILED_CODE);
+            }
         } catch (Exception e) {
             result.setCode(ConfigUtil.ERROR_CODE);
             result.setMsg(ConfigUtil.ERROR_MSG);
@@ -256,9 +266,20 @@ public class ManagerController {
     public Result<String> insertDocInfo(DocInfo docInfo, HttpSession session) {
         Result<String> result = new Result<String>();
         try {
+            AdminInfo adminInfo =(AdminInfo) session.getAttribute("adminInfo");
+            int aid = 0;
+            if (adminInfo != null) {
+                aid = adminInfo.getAid();
+            } else {
+                result.setCode(ConfigUtil.FAILED_CODE);
+                result.setMsg("登录失效，请重新登录");
+                result.setData(null);
+                return result;
+            }
             docInfo.setDocType("1");
             docInfoService.insertDocInfo(docInfo);
-            result.setData("添加成功");
+            result.setMsg("添加成功");
+            result.setCode(ConfigUtil.SUCCESS_CODE);
         } catch (Exception e) {
             result.setCode(ConfigUtil.ERROR_CODE);
             result.setMsg(ConfigUtil.ERROR_MSG);
