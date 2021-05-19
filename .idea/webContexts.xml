@@ -4,11 +4,13 @@
     <option name="state">
       <map>
         <entry key="file://$PROJECT_DIR$/src/main/webapp/view/doctor_addMedicRecord.html" value="file://$PROJECT_DIR$/src/main/webapp/view" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/view/doctor_addregister.html" value="file://$PROJECT_DIR$/src/main/webapp/view" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/view/doctor_select_add_register.html" value="file://$PROJECT_DIR$/src/main/webapp/view" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/view/manager.html" value="file://$PROJECT_DIR$/src/main/webapp/view" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/view/manager_add_onedoc.html" value="file://$PROJECT_DIR$/src/main/webapp/view" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/view/manager_contromedic.html" value="file://$PROJECT_DIR$/src/main/webapp/view" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/view/student_controlregister.html" value="file://$PROJECT_DIR$/src/main/webapp/view" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/view/student_show_preinfo.html" value="file://$PROJECT_DIR$/src/main/webapp/view" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/view/student_stuinfo.html" value="file://$PROJECT_DIR$/src/main/webapp/view" />
       </map>
     </option>

@@ -78,6 +78,9 @@
         <if test="illDate!=null and illDate !=''">
             and ill_date = #{illDate,jdbcType=VARCHAR}
         </if>
+        <if test="stuNum!=null and stuNum !=''">
+            and stu_num = #{stuNum,jdbcType=VARCHAR}
+        </if>
         <if test="treatmentType!=null and treatmentType !=''">
             and treatment_type != #{treatmentType,jdbcType=VARCHAR}
         </if>
@@ -175,9 +178,6 @@
             <if test="stuName !=null">
                 stu_name = #{stuName,jdbcType=VARCHAR},
             </if>
-            <if test="stuRegister !=null">
-                stu_register = #{stuRegister,jdbcType=VARCHAR},
-            </if>
             <if test="illType !=null">
                 ill_type = #{illType,jdbcType=VARCHAR},
             </if>
@@ -198,6 +198,10 @@
         stu_register = #{stuRegister,jdbcType=VARCHAR}
     </update>
 
+
+<!--                <if test="stuRegister !=null">
+                stu_register = #{stuRegister,jdbcType=VARCHAR},
+            </if>-->
     <delete id="deleteBystuRegister" parameterType="java.lang.String">
         delete from register_info
         where stu_register = #{stuRegister,jdbcType=VARCHAR}

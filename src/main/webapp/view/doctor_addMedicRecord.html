@@ -44,10 +44,21 @@
         </div>
     </div>
 
-    <div class="layui-form-item layui-form-text">
-        <label class="layui-form-label">诊断结果:</label>
+<!--    <div class="layui-form-item layui-form-text">-->
+<!--        <label class="layui-form-label">诊断结果:</label>-->
+<!--        <div class="layui-input-block">-->
+<!--            <textarea placeholder="请输入诊断结果" class="layui-textarea" name="diagnosticResults" lay-verify="diagnosticResults"></textarea>-->
+<!--        </div>-->
+<!--    </div>-->
+    <div class="layui-form-item">
+        <label class="layui-form-label">诊断方案</label>
         <div class="layui-input-block">
-            <textarea placeholder="请输入诊断结果" class="layui-textarea" name="diagnosticResults" lay-verify="diagnosticResults"></textarea>
+            <select name="diagnosticResults" id="diagnosticResults" lay-verify="diagnosticResults">
+                <option value="开具药物">开具药物</option>
+                <option value="处理伤口">处理伤口</option>
+                <option value="留置观察">留置观察</option>
+                <option value="转院治疗">转院治疗</option>
+            </select>
         </div>
     </div>
 
@@ -135,14 +146,6 @@
             });
             return false; //去掉该行layer不关闭
         });
-
-
-
-
-
-
-
-
     });
     </script>
 

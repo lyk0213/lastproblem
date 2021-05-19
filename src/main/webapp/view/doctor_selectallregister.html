@@ -22,6 +22,14 @@
                         </div>
                     </div>
 
+                <div class="layui-inline">
+                    <label class="layui-form-label">账号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="stuNum" id="stuNum" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+
                     <div class="layui-inline">
 <!--                        <button class="layui-btn" type="button" id="searchBtn">查询</button>-->
                         <button class="layui-btn layuiadmin-btn-useradmin" lay-submit
@@ -52,9 +60,6 @@
     </script>
 
 
-<!--    <script type="text/html" id="barDemo1">-->
-<!--        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="doit1">开具处方单</a>-->
-<!--    </script>-->
 </div>
 
 
@@ -92,6 +97,7 @@
                 {field : 'stuRegister',title : '挂号序列',width : 140},
                 {field : 'illType',title : '挂号类型',width : 140},
                 {field : 'illDate',title : '预约时间',width : 150},
+                {field : 'stuTemperature',title : '就诊温度',width : 150},
                 {field : 'treatmentType',title : '当前处理状况',width : 100},
                 {fixed : 'right',title : '就诊操作',width : 190,align : 'center',toolbar : '#barDemo'},
                 {fixed : 'right',title : '确认就诊单',width : 190,align : 'center',toolbar : '#barDemo1'}
@@ -108,6 +114,7 @@
                 tableIns.reload({
                     where:{
                         illDate: $('#Date1').val(),
+                        stuNum: $('#stuNum').val(),
                     },page:{
                         page: 1
                     }

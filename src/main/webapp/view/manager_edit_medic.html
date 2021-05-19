@@ -118,11 +118,16 @@
                            icon: 6,
                            time: 1200,
                            shade: 0.4
+                       },function(){
+                           var layerIndex = parent.layer.getFrameIndex(window.name);//获取当前iframe的索引
+                           parent.layer.close(layerIndex); //执行当前弹出窗口
+                           parent.layui.table.reload('medicinfo');//重新加载父页面的表格数据
                        });
-                   }else {
-                       layer.msg("修改失败，请重试");
+                   }else if(data.code == 1){
+                       layer.msg(data.msg);
                    }
-               }, error: function(){
+               },
+               error: function(){
                    layer.msg("服务器内部错误");
                }
            });

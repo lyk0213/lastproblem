@@ -164,15 +164,17 @@
                                 icon: 6,
                                 time: 1200,
                                 shade: 0.4
-                            }
-                            // , function() {
-                            //     var layerIndex = parent.layer.getFrameIndex(window.name);//获取当前iframe的索引
-                            //     parent.layer.close(layerIndex); //执行当前弹出窗口
-                            //     parent.window.location.href="../view/student.html"; //返回学生当前页面
-                            // }表单提交之后不做页面的跳转，仅仅进行局部的页面更新。
-                        );
-                    }else{
-                        layer.msg("修改失败，请重试");
+                            }, function() {
+                            var layerIndex = parent.layer.getFrameIndex(window.name);//获取当前iframe的索引
+                            parent.layer.close(layerIndex); //执行当前弹出窗口
+                            parent.layui.table.reload('stuinfo');//重新加载父页面的表格数据
+                        });
+                    }
+                    else if(data.code == 1){
+                        layer.msg(data.msg);
+                    }
+                    else{
+                        layer.msg(data.msg);
                     }
                 },
                 error: function(){

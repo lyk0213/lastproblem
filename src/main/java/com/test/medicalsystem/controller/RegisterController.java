@@ -131,11 +131,22 @@ public class RegisterController {
     医生查询全部挂号的语句
      */
     @RequestMapping(value = "/docquery")
-    public PageResult<List<RegisterInfo>> docselectAll(RegisterQuery query) {
+    public PageResult<List<RegisterInfo>> docselectAll(RegisterQuery query,HttpSession session) {
         int page = query.getPage();
         PageResult<List<RegisterInfo>> result = new PageResult<List<RegisterInfo>>();
         try {
-            System.out.println(query);
+            DocInfo docInfo = (DocInfo) session.getAttribute("docInfo");
+            int did = 0;
+            if (docInfo != null) {
+                did = docInfo.getDid();
+            } else {
+                result.setCode(ConfigUtil.FAILED_CODE);
+                result.setMsg("登录失效，请重新登录");
+                result.setData(null);
+                return result;
+            }
+            //输入查询，查出非0（预约的学生），仅仅显示已挂号学生和已经就诊了的学生
+            query.setTreatmentType("0");
             result = registerInfoService.selectAllForDoc(query);
             result.setPage(page);
             if (result.getData() == null) {

@@ -4,6 +4,7 @@ import javax.servlet.http.HttpSession;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -191,7 +192,8 @@ public class ManagerController {
         Result<String> result = new Result<String>();
         try {
             stuInfoService.updateStuinfoBystuNum(stuInfo);
-            result.setData("修改成功");
+            result.setCode(ConfigUtil.SUCCESS_CODE);
+            result.setMsg("修改成功");
         } catch (Exception e) {
             result.setCode(ConfigUtil.ERROR_CODE);
             result.setMsg(ConfigUtil.ERROR_MSG);
@@ -209,8 +211,9 @@ public class ManagerController {
         System.out.println("修改信息" + docInfo);
         Result<String> result = new Result<String>();
         try {
-            docInfoService.updateDocInfoBydocNum(docInfo);
-            result.setData("修改成功");
+                docInfoService.updateDocInfoBydocNum(docInfo);
+                result.setCode(ConfigUtil.SUCCESS_CODE);
+                result.setMsg("修改成功");
         } catch (Exception e) {
             result.setCode(ConfigUtil.ERROR_CODE);
             result.setMsg(ConfigUtil.ERROR_MSG);
@@ -224,6 +227,7 @@ public class ManagerController {
         Result<String> result = new Result<String>();
         try {
             medicNewsInfoService.updateMedicNewsInfoBymedicNum(medicNewsInfo);
+            result.setCode(ConfigUtil.SUCCESS_CODE);
             result.setData("修改成功");
         }catch (Exception e) {
             result.setCode(ConfigUtil.ERROR_CODE);
@@ -276,10 +280,20 @@ public class ManagerController {
                 result.setData(null);
                 return result;
             }
-            docInfo.setDocType("1");
-            docInfoService.insertDocInfo(docInfo);
-            result.setMsg("添加成功");
-            result.setCode(ConfigUtil.SUCCESS_CODE);
+            String docNum =  docInfo.getDocNum();
+            DocInfo docInfo1 =docInfoService.selectBydocNum(docNum);
+            if (StringUtils.isEmpty(docInfo1)){
+                docInfo.setDocType("1");
+                docInfoService.insertDocInfo(docInfo);
+                result.setMsg("添加成功");
+                result.setCode(ConfigUtil.SUCCESS_CODE);
+            }else {
+                result.setCode(ConfigUtil.FAILED_CODE);
+                result.setMsg("已经存在该用户");
+            }
+
+
+
         } catch (Exception e) {
             result.setCode(ConfigUtil.ERROR_CODE);
             result.setMsg(ConfigUtil.ERROR_MSG);
@@ -292,9 +306,20 @@ public class ManagerController {
     public Result<String> insertMedicNewsInfo(MedicNewsInfo medicNewsInfo,HttpSession session){
         Result<String> result = new Result<String>();
         try{
-            medicNewsInfo.setMedicType("1");
-            medicNewsInfoService.insertMedicNewsInfo(medicNewsInfo);
-            result.setData("增加药物信息成功");
+            String medicNum = medicNewsInfo.getMedicNum();
+            MedicNewsInfo medicNewsInfo1 = medicNewsInfoService.selectBymedicNum(medicNum);
+            if (StringUtils.isEmpty(medicNewsInfo1)){
+                medicNewsInfo.setMedicType("1");
+                medicNewsInfoService.insertMedicNewsInfo(medicNewsInfo);
+                result.setData("增加药物信息成功");
+                result.setCode(ConfigUtil.SUCCESS_CODE);
+                result.setMsg("添加成功");
+            }else {
+                result.setCode(ConfigUtil.FAILED_CODE);
+                result.setMsg("该编号已存在药物");
+            }
+
+
         }catch (Exception e) {
             result.setCode(ConfigUtil.ERROR_CODE);
             result.setMsg(ConfigUtil.ERROR_MSG);

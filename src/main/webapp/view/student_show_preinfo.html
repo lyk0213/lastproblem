@@ -67,6 +67,12 @@
         </div>
     </div>
 
+    <div class="layui-form-item">
+        <label class="layui-form-label">就诊费用:</label>
+        <div class="layui-input-block">
+            <input type="text" name="medicMoney" lay-verify="medicMoney" class="layui-input" disabled="" title="不允许修改">
+        </div>
+    </div>
 <!--    <div class="layui-form-item">-->
 <!--        <label class="layui-form-label">处方价格:</label>-->
 <!--        <div class="layui-input-block">-->
@@ -99,7 +105,8 @@
                         diagnosticResults:data.data.diagnosticResults,
                         medicNews:data.data.medicNews,
                         medicWay:data.data.medicWay,
-                        adviceTime:data.data.adviceTime
+                        adviceTime:data.data.adviceTime,
+                        medicMoney:data.data.medicMoney,
                     });
                 }else{
                     layer.alert(data.msg);

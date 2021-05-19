@@ -244,7 +244,9 @@ public class DocinfoController {
             if (medicRecordInfoService.selectBystuRegister(stuRegister) == null) {
                 medicRecordInfoService.insertMedicRecordInfo(medicRecordInfo);
                 RegisterInfo a = new RegisterInfo();
-                a.setTreatmentType("1");
+                //修改状态为2，已作出诊断判断
+                a.setStuRegister(medicRecordInfo.getStuRegister());
+                a.setTreatmentType("2");
                 registerInfoService.updateRegisterInfoByNum(a);
                 result.setMsg("增加药物单成功");
                 result.setCode(ConfigUtil.SUCCESS_CODE);
@@ -401,7 +403,25 @@ public class DocinfoController {
                 drugOut.setEndMoney(sum);
             }
 
+            PrescriptionInfo p1 = new PrescriptionInfo();
+            p1.setMedicMoney(drugOut.getEndMoney());
+            p1.setStuRegister(drugOut.getStuRegister());
 
+            Double endMoney = drugOut.getEndMoney();
+
+            RegisterInfo registerInfo = registerInfoService.selectBystuRegister(p1.getStuRegister());
+
+            String stuNum =registerInfo.getStuNum();
+            StuInfo stuInfo = stuInfoService.selectBystuNum(stuNum);
+            Double lastmoney =stuInfo.getStuBalance();
+
+            Double differ=lastmoney-endMoney;
+            stuInfo.setStuBalance(differ);
+
+            stuInfoService.updateStuinfoBystuNum(stuInfo);
+
+
+            prescriptionInfoService.updatePrescriptionInfoBystuRegister(p1);
             drugOutService.updateDrugOutBystuRegister(drugOut);
             result.setMsg("修改成功");
             result.setCode(ConfigUtil.SUCCESS_CODE);
